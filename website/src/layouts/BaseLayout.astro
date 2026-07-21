@@ -13,6 +13,7 @@ const canonical = new URL(withoutBase(Astro.url.pathname), Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href={withBase('/images/brand/av-logo-white.png')} />
     <link rel="preload" href={withBase('/fonts/BebasNeue-Regular.woff2')} as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#11110f" />
