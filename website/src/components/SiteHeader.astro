@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../utils/paths';
 const pathname = Astro.url.pathname;
 const links = [
   ['About', '/about/'],
@@ -6,27 +7,27 @@ const links = [
   ['Get involved', '/get-involved/'],
   ['Media', '/media/'],
 ];
-const isHome = pathname === '/';
+const isHome = pathname === withBase('/');
 ---
 <header class:list={['site-header', isHome && 'site-header--hero']}>
-  <a class="wordmark" href="/" aria-label="La Gente de La Tierra home">
-    <img src="/images/brand/av-logo-white.png" alt="" width="720" height="396" />
+  <a class="wordmark" href={withBase('/')} aria-label="La Gente de La Tierra home">
+    <img src={withBase('/images/brand/av-logo-white.png')} alt="" width="720" height="396" />
     <span class="sr-only">La Gente de La Tierra</span>
   </a>
   <nav aria-label="Primary navigation">
-    {links.map(([label, href]) => <a href={href} aria-current={pathname === href ? 'page' : undefined}>{label}</a>)}
-    <a class="nav-contact" href="/contact-us/">Contact</a>
+    {links.map(([label, href]) => <a href={withBase(href)} aria-current={pathname === withBase(href) ? 'page' : undefined}>{label}</a>)}
+    <a class="nav-contact" href={withBase('/contact-us/')}>Contact</a>
   </nav>
 </header>
 {isHome && (
   <header class="site-header site-header--drop" aria-hidden="true" inert>
-    <a class="wordmark" href="/" aria-label="La Gente de La Tierra home">
-      <img src="/images/brand/av-logo-white.png" alt="" width="720" height="396" />
+    <a class="wordmark" href={withBase('/')} aria-label="La Gente de La Tierra home">
+      <img src={withBase('/images/brand/av-logo-white.png')} alt="" width="720" height="396" />
       <span class="sr-only">La Gente de La Tierra</span>
     </a>
     <nav aria-label="Sticky primary navigation">
-      {links.map(([label, href]) => <a href={href}>{label}</a>)}
-      <a class="nav-contact" href="/contact-us/">Contact</a>
+      {links.map(([label, href]) => <a href={withBase(href)}>{label}</a>)}
+      <a class="nav-contact" href={withBase('/contact-us/')}>Contact</a>
     </nav>
   </header>
 )}

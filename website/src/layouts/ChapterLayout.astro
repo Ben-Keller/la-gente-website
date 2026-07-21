@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import PlaceholderImage from '../components/PlaceholderImage.astro';
 import type { Chapter } from '../data/chapters';
+import { withBase } from '../utils/paths';
 const { chapter } = Astro.props as { chapter: Chapter };
 ---
 <BaseLayout title={`${chapter.title} — La Gente de La Tierra`} description={chapter.summary}>
@@ -25,6 +26,6 @@ const { chapter } = Astro.props as { chapter: Chapter };
     <p class="placeholder-note">Editorial placeholder — replace with a verified participant quotation.</p>
   </section>
   <nav class="chapter-next page-shell" aria-label="Chapter navigation">
-    <a href="/communities/"><span>All stories</span><strong>Explore the communities</strong></a>
+    <a href={withBase('/communities/')}><span>All stories</span><strong>Explore the communities</strong></a>
   </nav>
 </BaseLayout>

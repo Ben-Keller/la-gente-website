@@ -1,10 +1,11 @@
 ---
 import PlaceholderImage from './PlaceholderImage.astro';
 import type { Chapter } from '../data/chapters';
+import { withBase } from '../utils/paths';
 const { chapter } = Astro.props as { chapter: Chapter };
 ---
 <article class="chapter-card">
-  <a href={`/${chapter.slug}/`} aria-label={`Chapter ${chapter.number}: ${chapter.title}`}>
+  <a href={withBase(`/${chapter.slug}/`)} aria-label={`Chapter ${chapter.number}: ${chapter.title}`}>
     <PlaceholderImage src={chapter.images.hero} label={`${chapter.title} — ${chapter.region}`} ratio="cinema" />
     <div class="chapter-card__body">
       <span>Chapter {String(chapter.number).padStart(2, '0')}</span>

@@ -2,9 +2,10 @@
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import '../styles/global.css';
+import { withBase, withoutBase } from '../utils/paths';
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const canonical = new URL(withoutBase(Astro.url.pathname), Astro.site);
 ---
 <!doctype html>
 <html lang="en">
@@ -12,7 +13,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <link rel="preload" href="/fonts/BebasNeue-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={withBase('/fonts/BebasNeue-Regular.woff2')} as="font" type="font/woff2" crossorigin />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#11110f" />
     <meta property="og:title" content={title} />

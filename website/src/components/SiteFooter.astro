@@ -1,3 +1,6 @@
+---
+import { withBase } from '../utils/paths';
+---
 <footer class="site-footer">
   <div>
     <p class="footer-mark">La Gente de La Tierra</p>
@@ -5,7 +8,7 @@
     <p class="footer-production">A production of Aesthetic Voyager Films</p>
   </div>
   <div class="footer-links">
-    <a href="/about/">About</a><a href="/communities/">Chapters</a><a href="/get-involved/">Get involved</a><a href="/contact-us/">Contact</a>
+    <a href={withBase('/about/')}>About</a><a href={withBase('/communities/')}>Chapters</a><a href={withBase('/get-involved/')}>Get involved</a><a href={withBase('/contact-us/')}>Contact</a>
   </div>
   <p class="footer-meta">© {new Date().getFullYear()} La Gente de La Tierra · Facebook · Twitter · Instagram · Vimeo</p>
 </footer>

@@ -1,7 +1,9 @@
 ---
+import { withBase } from '../utils/paths';
 interface Props { destination: string; }
-const { destination } = Astro.props;
-const canonical = new URL(destination, Astro.site);
+const { destination: destinationPath } = Astro.props;
+const destination = withBase(destinationPath);
+const canonical = new URL(destinationPath, Astro.site);
 ---
 <!doctype html>
 <html lang="en">

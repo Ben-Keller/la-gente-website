@@ -1,4 +1,4 @@
-@font-face { font-family:'Bebas Neue'; src:url('/fonts/BebasNeue-Regular.woff2') format('woff2'); font-style:normal; font-weight:400; font-display:swap; }
+@font-face { font-family:'Bebas Neue'; src:url('../fonts/BebasNeue-Regular.woff2') format('woff2'); font-style:normal; font-weight:400; font-display:swap; }
 :root { color-scheme:dark; --ink:#f1efe8; --paper:#11110f; --muted:#aaa79d; --line:#363632; --accent:#d86b46; --dark:#090a08; --display:'Bebas Neue',Impact,sans-serif; --serif:Iowan Old Style,Baskerville,Georgia,serif; --sans:Inter,Helvetica Neue,Arial,sans-serif; }
 * { box-sizing:border-box; }
 html { background:var(--paper); color:var(--ink); scroll-behavior:smooth; }
@@ -39,7 +39,7 @@ h3 { font-size:2.2rem; }
 .recovered-image { margin:0; }
 .recovered-image::before,.recovered-image::after { display:none; }
 .recovered-image img { width:100%; height:100%; display:block; object-fit:cover; }
-.home-hero { min-height:100svh; position:relative; background:var(--dark) url('/images/recovered/main1.webp') center/cover no-repeat; color:#fff; overflow:hidden; }
+.home-hero { min-height:100svh; position:relative; background:var(--dark) url('../images/recovered/main1.webp') center/cover no-repeat; color:#fff; overflow:hidden; }
 .home-hero::after { content:''; position:absolute; z-index:1; inset:0; background:rgba(0,0,0,.34); pointer-events:none; }
 .home-hero__poster,.home-hero__video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .home-hero__poster { z-index:1; opacity:0; transition:opacity 2.6s ease; }
