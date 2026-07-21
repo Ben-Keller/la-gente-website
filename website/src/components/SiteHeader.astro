@@ -1,0 +1,55 @@
+---
+const pathname = Astro.url.pathname;
+const links = [
+  ['About', '/about/'],
+  ['Chapters', '/communities/'],
+  ['Get involved', '/get-involved/'],
+  ['Media', '/media/'],
+];
+const isHome = pathname === '/';
+---
+<header class:list={['site-header', isHome && 'site-header--hero']}>
+  <a class="wordmark" href="/" aria-label="La Gente de La Tierra home">
+    <img src="/images/brand/av-logo-white.png" alt="" width="720" height="396" />
+    <span class="sr-only">La Gente de La Tierra</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    {links.map(([label, href]) => <a href={href} aria-current={pathname === href ? 'page' : undefined}>{label}</a>)}
+    <a class="nav-contact" href="/contact-us/">Contact</a>
+  </nav>
+</header>
+{isHome && (
+  <header class="site-header site-header--drop" aria-hidden="true" inert>
+    <a class="wordmark" href="/" aria-label="La Gente de La Tierra home">
+      <img src="/images/brand/av-logo-white.png" alt="" width="720" height="396" />
+      <span class="sr-only">La Gente de La Tierra</span>
+    </a>
+    <nav aria-label="Sticky primary navigation">
+      {links.map(([label, href]) => <a href={href}>{label}</a>)}
+      <a class="nav-contact" href="/contact-us/">Contact</a>
+    </nav>
+  </header>
+)}
+{isHome && (
+  <script>
+    const header = document.querySelector('.site-header--drop');
+    if (header) {
+      let ticking = false;
+      const updateHeader = () => {
+        const visible = window.scrollY > 140;
+        header.classList.toggle('is-visible', visible);
+        header.setAttribute('aria-hidden', String(!visible));
+        header.toggleAttribute('inert', !visible);
+        ticking = false;
+      };
+      const requestUpdate = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(updateHeader);
+        }
+      };
+      updateHeader();
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+    }
+  </script>
+)}

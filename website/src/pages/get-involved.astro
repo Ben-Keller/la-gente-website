@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const organizations = [
+  { type:'GoFundMe fundraiser', name:'Covid Relief Effort in Iquitos', description:'The Amazon region was hit hard by COVID-19. Friends of the project in Iquitos led an effort to provide food and medicine to vulnerable youth and elders facing limited government support and access to resources.', action:'Fundraiser link pending verification' },
+  { type:'Non-profit social enterprise', name:'Threads of Peru', description:'Threads of Peru connects the world to handmade treasures of the Andes, helping strengthen ancient craft techniques and empower artisans.', action:'Visit shop' },
+  { type:'Aid organization · NGO', name:'Porvenir Peru', description:'Registered in Switzerland and Peru, Porvenir Peru supports Indigenous mountain communities in the Andean region of Cusco.', action:'Learn more' },
+  { type:'Conservation organization', name:'Nature and Culture International', description:'Nature and Culture International protects ecosystems and biodiversity, empowers Indigenous communities, and fights climate change.', action:'Learn more' },
+  { type:'Non-profit organization', name:'APECA Peru', description:'APECA works with Indigenous communities along the Amazon on public-health training, midwife education, reforestation, clean water, and sanitation in cooperation with local natural-medicine practices.', action:'Learn more' },
+  { type:'Preservation foundation', name:'Ayahuasca Foundation', description:'The Ayahuasca Foundation offers opportunities to learn from the Inka Kenan Shipibo community in the Amazon through organized retreats.', action:'Learn more' },
+  { type:'Family business', name:'Uros Balsero', description:'Visit the floating islands of Lake Titicaca and support the tourism business of the family of Luis, Uros Balsero.', action:'Learn more' },
+  { type:'Non-profit organization', name:'Expedition 5300', description:'Expedition 5300 supports work related to miner health at the La Rinconada gold mine.', action:'Learn more' },
+  { type:'Non-profit organization', name:'Share The Wave', description:'Share The Wave supports ecological conservation in Huanchaco, home of the caballitos de totora.', action:'Learn more' },
+  { type:'Peruvian owned', name:'Sacred Valley Salt', description:'Sacred Valley Salt is collected by hand in Peru’s Sacred Valley of the Incas, as it has been for the past millennium. Its products are made by locally owned and operated cooperatives and independent small businesses.', action:'Learn more' },
+];
+---
+<BaseLayout title="Get Involved — La Gente de La Tierra" description="Support community organizations working in the places featured by La Gente de La Tierra.">
+  <header class="page-hero page-shell"><p class="eyebrow">Get involved</p><h1>Support local<br />community organizations.</h1><p class="lead">The series shares the intimate relationships and reverence for the Earth found in communities across Peru, inviting audiences to reconsider their own connection with Mother Nature. These resources offer opportunities to assist ecological and cultural conservation across Peru.</p></header>
+  <section class="page-shell organization-list" aria-label="Community organizations">{organizations.map((organization, index) => <article><span>{String(index + 1).padStart(2, '0')}</span><div><p class="eyebrow">{organization.type}</p><h2>{organization.name}</h2></div><p>{organization.description}</p><span class="text-link">{organization.action}</span></article>)}</section>
+  <aside class="page-shell editorial-note"><p><strong>Link verification required:</strong> organization descriptions were migrated from the original project copy. Current status, official URLs, donation destinations, affiliations, and safeguarding information must be verified before outbound links are activated.</p></aside>
+</BaseLayout>

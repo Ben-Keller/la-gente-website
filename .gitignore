@@ -1,0 +1,21 @@
+.DS_Store
+
+# Local migration and research materials (not part of the deployed site)
+/Bebas_Neue/
+/av-logo.png
+/lagente-migration-scraper/
+/lagentedelatierra.WordPress.*.xml
+/manual-screenshots/
+/rebuild/
+/site-analysis/
+/stripey-vlc.mp4
+/*.sql.gz
+
+# Website build and local dependencies
+website/node_modules/
+website/dist/
+website/.astro/
+website/*.log
+website/.env
+website/.env.*
+!website/.env.example

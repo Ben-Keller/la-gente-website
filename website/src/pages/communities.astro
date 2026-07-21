@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ChapterCard from '../components/ChapterCard.astro';
+import { chapters } from '../data/chapters';
+---
+<BaseLayout title="Chapters — La Gente de La Tierra" description="Explore the chapters, communities, and landscapes featured in La Gente de La Tierra.">
+  <header class="page-hero page-shell"><p class="eyebrow">Across Peru</p><h1>Explore the<br />chapters.</h1><p class="lead">From the Pacific coast to the high Andes and the Amazon rainforest, every chapter begins with a distinct relationship to place.</p></header>
+  <section class="page-shell"><div class="chapter-grid chapter-grid--large">{chapters.map((chapter) => <ChapterCard chapter={chapter} />)}</div></section>
+</BaseLayout>

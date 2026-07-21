@@ -1,0 +1,30 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PlaceholderImage from '../components/PlaceholderImage.astro';
+import type { Chapter } from '../data/chapters';
+const { chapter } = Astro.props as { chapter: Chapter };
+---
+<BaseLayout title={`${chapter.title} — La Gente de La Tierra`} description={chapter.summary}>
+  <section class="chapter-hero page-shell">
+    <p class="eyebrow">Chapter {String(chapter.number).padStart(2, '0')} · {chapter.region}</p>
+    <h1>{chapter.title}</h1>
+    <p class="chapter-deck">{chapter.community}</p>
+    <PlaceholderImage src={chapter.images.hero} label={`${chapter.title} hero still`} ratio="cinema" eager />
+  </section>
+  <section class="chapter-intro page-shell narrow-grid">
+    <div><p class="eyebrow">The story</p><h2>{chapter.eyebrow}</h2></div>
+    <div><p class="lead">{chapter.summary}</p><ul class="tag-list">{chapter.themes.map((theme) => <li>{theme}</li>)}</ul></div>
+  </section>
+  <section class="image-pair page-shell">
+    <PlaceholderImage src={chapter.images.portrait} label={`${chapter.title} community portrait`} ratio="portrait" />
+    <PlaceholderImage src={chapter.images.landscape} label={`${chapter.title} landscape`} ratio="landscape" />
+  </section>
+  <section class="quote-section page-shell">
+    <p class="eyebrow">Field note</p>
+    <blockquote>“A place is not only seen. It is understood through the people who care for it.”</blockquote>
+    <p class="placeholder-note">Editorial placeholder — replace with a verified participant quotation.</p>
+  </section>
+  <nav class="chapter-next page-shell" aria-label="Chapter navigation">
+    <a href="/communities/"><span>All stories</span><strong>Explore the communities</strong></a>
+  </nav>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderImage from '../components/PlaceholderImage.astro';
+import ChapterCard from '../components/ChapterCard.astro';
+import { chapters } from '../data/chapters';
+---
+<BaseLayout title="La Gente de La Tierra — Documentary Series" description="A six-part documentary series about the communities, cultures, and landscapes of Peru.">
+  <section class="home-hero">
+    <img class="home-hero__poster" src="/images/recovered/main1.webp" alt="" width="1600" height="898" fetchpriority="high" decoding="async" />
+    <video class="home-hero__video" autoplay muted loop playsinline preload="metadata" poster="/images/recovered/main1.webp" aria-hidden="true">
+      <source src="/video/stripey-vlc.mp4" type="video/mp4" />
+    </video>
+    <div class="home-hero__content page-shell">
+      <h1>La Gente de La Tierra</h1>
+      <p class="home-hero__translation">“The People of the Earth”</p>
+    </div>
+  </section>
+  <script>
+    const poster = document.querySelector('.home-hero__poster');
+    const video = document.querySelector('.home-hero__video');
+    if (poster instanceof HTMLElement && video instanceof HTMLVideoElement) {
+      const minimumPosterTime = 1600;
+      let posterVisibleAt = performance.now();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        poster.classList.add('is-visible');
+        posterVisibleAt = performance.now();
+      }));
+      const revealVideo = () => {
+        const remainingHold = Math.max(0, minimumPosterTime - (performance.now() - posterVisibleAt));
+        window.setTimeout(() => {
+          video.classList.add('is-playing');
+          poster.classList.add('is-fading-out');
+          poster.classList.remove('is-visible');
+        }, remainingHold);
+      };
+      video.addEventListener('playing', revealVideo, { once: true });
+      if (!video.paused && video.currentTime > 0) revealVideo();
+    }
+  </script>
+  <section class="documentary-feature page-shell">
+    <div class="trailer-frame">
+      <video controls playsinline preload="metadata" poster="/images/gallery/media23.webp">
+        <source src="/video/trailer-vertical.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="documentary-feature__copy"><p class="eyebrow">Documentary</p><h2>Watch the award-winning documentary series</h2><p class="lead">A six-part documentary series exploring the unique ways in which the natural world influences the art, culture, and spirituality of communities across Peru.</p><a class="text-link" href="/about/">About the documentary ↗</a></div>
+  </section>
+  <section class="chapter-index page-shell">
+    <div class="section-heading"><div><p class="eyebrow">Chapters of the series</p><h2>Six different relationships with the natural world</h2><p class="section-intro">Each chapter follows the narrative thread of environmentalism and connection to the Earth, revealing how lives have been shaped by the natural world and by experiences of global climate change.</p></div><a class="text-link" href="/communities/">View all chapters ↗</a></div>
+    <div class="chapter-grid">{chapters.map((chapter) => <ChapterCard chapter={chapter} />)}</div>
+  </section>
+  <section class="feature-band page-shell">
+    <PlaceholderImage src="/images/recovered/GI-Main.webp" label="Behind the scenes in Peru" ratio="landscape" />
+    <div><p class="eyebrow">Beyond the film</p><h2>Stand with the communities behind the stories.</h2><p>Meet the organizations doing long-term work on the ground and find practical ways to support them.</p><a class="button" href="/get-involved/">Get involved</a></div>
+  </section>
+</BaseLayout>

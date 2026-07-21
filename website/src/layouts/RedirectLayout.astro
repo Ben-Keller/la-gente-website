@@ -1,0 +1,20 @@
+---
+interface Props { destination: string; }
+const { destination } = Astro.props;
+const canonical = new URL(destination, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0; url=${destination}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={canonical} />
+    <title>Redirecting — La Gente de La Tierra</title>
+  </head>
+  <body>
+    <p>This page has moved. <a href={destination}>Continue to La Gente de La Tierra</a>.</p>
+    <script is:inline define:vars={{ destination }}>window.location.replace(destination);</script>
+  </body>
+</html>

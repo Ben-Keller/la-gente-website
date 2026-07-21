@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderImage from '../components/PlaceholderImage.astro';
+const gallery = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,20,22,23,24,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,49,50,51,52];
+---
+<BaseLayout title="Media — La Gente de La Tierra" description="Press, trailers, stills, and updates from La Gente de La Tierra.">
+  <header class="media-hero page-shell"><p class="eyebrow">Press & media</p><h1>Media</h1><p>Trailers, production stills, press materials, and release updates.</p></header>
+  <section class="page-shell media-grid"><article><PlaceholderImage src="/images/recovered/main1.webp" label="Trailer poster" ratio="cinema" /><p class="eyebrow">Film</p><h2>Official trailer</h2><p>Video asset and release date pending.</p></article><article><PlaceholderImage src="/images/recovered/media23.webp" label="Press still collection" ratio="landscape" /><p class="eyebrow">Press kit</p><h2>Stills & materials</h2><p>Approved photography, credits, synopsis, and filmmaker bios pending.</p></article></section>
+  <section class="page-shell recovered-gallery" aria-labelledby="gallery-title">
+    <h2 id="gallery-title" class="sr-only">Photograph gallery</h2>
+    <ul class="gallery-grid">
+      {gallery.map((number, index) => <li><img src={`/images/gallery/media${number}.webp`} alt={`La Gente de La Tierra recovered field photograph ${String(index + 1).padStart(2, '0')}`} loading="lazy" decoding="async" /></li>)}
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import PlaceholderImage from './PlaceholderImage.astro';
+import type { Chapter } from '../data/chapters';
+const { chapter } = Astro.props as { chapter: Chapter };
+---
+<article class="chapter-card">
+  <a href={`/${chapter.slug}/`} aria-label={`Chapter ${chapter.number}: ${chapter.title}`}>
+    <PlaceholderImage src={chapter.images.hero} label={`${chapter.title} — ${chapter.region}`} ratio="cinema" />
+    <div class="chapter-card__body">
+      <span>Chapter {String(chapter.number).padStart(2, '0')}</span>
+      <h3>{chapter.title}</h3>
+      <p>{chapter.community}</p>
+      <span class="text-link">Explore chapter <span aria-hidden="true">↗</span></span>
+    </div>
+  </a>
+</article>

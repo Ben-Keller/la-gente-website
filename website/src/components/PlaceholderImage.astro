@@ -1,0 +1,17 @@
+---
+interface Props {
+  label?: string;
+  ratio?: 'landscape' | 'portrait' | 'cinema';
+  class?: string;
+  src?: string;
+  eager?: boolean;
+}
+const { label = 'Documentary still', ratio = 'landscape', class: className = '', src, eager = false } = Astro.props;
+---
+{src ? (
+  <figure class:list={['placeholder-image', 'recovered-image', `placeholder-image--${ratio}`, className]}>
+    <img src={src} alt={label} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} decoding="async" />
+  </figure>
+) : (
+  <div class:list={['placeholder-image', `placeholder-image--${ratio}`, className]} role="img" aria-label={`${label} — placeholder image`}><span>{label}</span></div>
+)}
