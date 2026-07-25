@@ -3,9 +3,37 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import '../styles/global.css';
 import { withBase, withoutBase } from '../utils/paths';
+import bebasNeueUrl from '../assets/fonts/BebasNeue-Regular.woff2?url';
+import { chapters } from '../data/chapters';
+import { SITE } from '../data/site';
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
-const canonical = new URL(withoutBase(Astro.url.pathname), Astro.site);
+const canonical = new URL(withBase(withoutBase(Astro.url.pathname)), Astro.site);
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'TVSeries',
+  name: SITE.name,
+  alternateName: SITE.alternateName,
+  description: SITE.description,
+  url: new URL(withBase('/'), Astro.site).href,
+  image: new URL(withBase(SITE.defaultImage), Astro.site).href,
+  genre: ['Documentary', 'Environment', 'Culture'],
+  countryOfOrigin: { '@type': 'Country', name: 'Peru' },
+  productionCompany: { '@type': 'Organization', name: SITE.productionCompany },
+  director: [
+    { '@type': 'Person', name: 'Mitchell Tijerina' },
+    { '@type': 'Person', name: 'Benjamin Keller' },
+  ],
+  numberOfEpisodes: 6,
+  episode: chapters.map((chapter) => ({
+    '@type': 'TVEpisode',
+    episodeNumber: chapter.number,
+    name: chapter.community,
+    description: chapter.summary,
+    url: new URL(withBase(`/${chapter.slug}/`), Astro.site).href,
+  })),
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -13,13 +41,23 @@ const canonical = new URL(withoutBase(Astro.url.pathname), Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/png" href={withBase('/images/brand/av-logo-white.png')} />
-    <link rel="preload" href={withBase('/fonts/BebasNeue-Regular.woff2')} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" type="image/png" sizes="512x512" href={withBase('/favicon.png')} />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase('/apple-touch-icon.png')} />
+    <link rel="preload" href={bebasNeueUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#11110f" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={new URL(withBase(SITE.defaultImage), Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    {plausibleDomain && <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>}
     <title>{title}</title>
   </head>
   <body>

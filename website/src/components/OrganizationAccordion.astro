@@ -1,0 +1,36 @@
+---
+import type { Organization } from '../data/organizations';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  organization: Organization;
+  index: number;
+}
+
+const { organization, index } = Astro.props;
+const number = index + 1;
+const panelId = `organization-panel-${number}`;
+---
+<article class="organization-accordion" id={`organization-${number}`} data-organization-index={index}>
+  <button class="organization-accordion__trigger" type="button" aria-expanded="false" aria-controls={panelId}>
+    <span class="organization-accordion__number">{String(number).padStart(2, '0')}</span>
+    <img src={withBase(organization.image)} alt="" loading="lazy" decoding="async" />
+    <span class="organization-accordion__heading">
+      <span class="eyebrow">{organization.type}</span>
+      <strong>{organization.name}</strong>
+      <small>{organization.place}</small>
+    </span>
+    <span class="organization-accordion__symbol" aria-hidden="true"></span>
+  </button>
+  <div class="organization-accordion__panel" id={panelId} aria-hidden="true">
+    <div class="organization-accordion__panel-inner">
+      <div class="organization-accordion__details">
+        <p class="organization-accordion__typed" data-text={organization.description}>{organization.description}</p>
+        <a class="text-link" href={organization.url} target="_blank" rel="noreferrer">
+          {organization.action}<span class="external-link-mark" aria-hidden="true">+</span>
+        </a>
+        <p class="organization-accordion__placeholder">External destinations should be reviewed periodically for current programs and donation terms.</p>
+      </div>
+    </div>
+  </div>
+</article>

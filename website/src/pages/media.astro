@@ -2,15 +2,74 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/PlaceholderImage.astro';
 import { withBase } from '../utils/paths';
+import sharp from 'sharp';
+import path from 'node:path';
+
 const gallery = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,20,22,23,24,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,49,50,51,52];
+const galleryImages = await Promise.all(gallery.map(async (number, index) => {
+  const src = `/images/gallery/media${number}.webp`;
+  const metadata = await sharp(path.join(process.cwd(), 'public', src)).metadata();
+
+  return {
+    src,
+    width: metadata.width ?? 1600,
+    height: metadata.height ?? 1200,
+    alt: `La Gente de La Tierra recovered field photograph ${String(index + 1).padStart(2, '0')}`,
+  };
+}));
 ---
 <BaseLayout title="Media — La Gente de La Tierra" description="Press, trailers, stills, and updates from La Gente de La Tierra.">
   <header class="media-hero page-shell"><p class="eyebrow">Press & media</p><h1>Media</h1><p>Trailers, production stills, press materials, and release updates.</p></header>
-  <section class="page-shell media-grid"><article><PlaceholderImage src="/images/recovered/main1.webp" label="Trailer poster" ratio="cinema" /><p class="eyebrow">Film</p><h2>Official trailer</h2><p>Video asset and release date pending.</p></article><article><PlaceholderImage src="/images/recovered/media23.webp" label="Press still collection" ratio="landscape" /><p class="eyebrow">Press kit</p><h2>Stills & materials</h2><p>Approved photography, credits, synopsis, and filmmaker bios pending.</p></article></section>
+  <section class="page-shell media-grid">
+    <article>
+      <div class="media-trailer"><video controls playsinline preload="metadata" poster={withBase('/images/gallery/media23.webp')}><source src={withBase('/video/trailer-vertical.mp4')} type="video/mp4" /></video></div>
+      <p class="eyebrow">Film</p><h2>Official trailer</h2><p>Watch an introduction to the six-part documentary journey.</p>
+    </article>
+    <article>
+      <PlaceholderImage src="/images/recovered/media23.webp" label="Press still collection" ratio="landscape" />
+      <p class="eyebrow">Press kit</p><h2>Stills & materials</h2><p>Synopsis, filmmaker biographies, production credits, and selected photography.</p>
+      <a class="button" href={withBase('/press-kit/')}>Open press kit</a>
+    </article>
+  </section>
   <section class="page-shell recovered-gallery" aria-labelledby="gallery-title">
     <h2 id="gallery-title" class="sr-only">Photograph gallery</h2>
-    <ul class="gallery-grid">
-      {gallery.map((number, index) => <li><img src={withBase(`/images/gallery/media${number}.webp`)} alt={`La Gente de La Tierra recovered field photograph ${String(index + 1).padStart(2, '0')}`} loading="lazy" decoding="async" /></li>)}
+    <ul class="gallery-grid" id="media-gallery">
+      {galleryImages.map((image, index) => (
+        <li style={`--photo-ratio:${image.width}/${image.height}`}>
+          <a
+            href={withBase(image.src)}
+            data-pswp-width={image.width}
+            data-pswp-height={image.height}
+            target="_blank"
+            aria-label={`Open photograph ${index + 1} of ${galleryImages.length}`}
+          >
+            <img
+              src={withBase(image.src)}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading={index < 4 ? 'eager' : 'lazy'}
+              fetchpriority={index < 2 ? 'high' : 'auto'}
+              decoding="async"
+            />
+          </a>
+        </li>
+      ))}
     </ul>
   </section>
+
+  <script>
+    import PhotoSwipeLightbox from 'photoswipe/lightbox';
+    import 'photoswipe/style.css';
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#media-gallery',
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
+      bgOpacity: 0.94,
+      showHideAnimationType: 'fade',
+    });
+
+    lightbox.init();
+  </script>
 </BaseLayout>

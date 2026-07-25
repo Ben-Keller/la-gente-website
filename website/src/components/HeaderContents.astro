@@ -1,0 +1,25 @@
+---
+import { primaryNavigation } from '../data/site';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  navigationId: string;
+  pathname: string;
+  sticky?: boolean;
+}
+
+const { navigationId, pathname, sticky = false } = Astro.props;
+---
+<a class="wordmark" href={withBase('/')} aria-label="La Gente de La Tierra home">
+  <img src={withBase('/images/brand/av-logo-white.png')} alt="" width="720" height="396" />
+  <span class="sr-only">La Gente de La Tierra</span>
+</a>
+<button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls={navigationId}>
+  <span></span><span></span><span></span><span class="sr-only">Open menu</span>
+</button>
+<nav id={navigationId} aria-label={sticky ? 'Sticky primary navigation' : 'Primary navigation'}>
+  {primaryNavigation.map(({ label, href }) => (
+    <a href={withBase(href)} aria-current={!sticky && pathname === withBase(href) ? 'page' : undefined}>{label}</a>
+  ))}
+  <a class="nav-contact" href={withBase('/contact-us/')}>Contact</a>
+</nav>

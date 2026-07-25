@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ben-keller.github.io/la-gente-website/sitemap-index.xml

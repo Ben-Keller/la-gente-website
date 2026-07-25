@@ -1,0 +1,47 @@
+---
+const { compact = false } = Astro.props;
+---
+<form class:list={['newsletter-form', compact && 'newsletter-form--compact']} action="https://api.web3forms.com/submit" method="POST" data-newsletter-form>
+  <input type="hidden" name="access_key" value="d158eeed-e3ae-4162-8a7a-4d6fb3663f04" />
+  <input type="hidden" name="subject" value="New La Gente release-update subscriber" />
+  <input type="hidden" name="from_name" value="La Gente de La Tierra website" />
+  <input type="hidden" name="subscription_type" value="Screening and release updates" />
+  <input class="contact-botcheck" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" />
+  <label>
+    <span class="sr-only">Email address</span>
+    <input type="email" name="email" autocomplete="email" placeholder="Email address" required />
+  </label>
+  <button class="button" type="submit">Follow the release</button>
+  <p class="newsletter-form__status" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter-form]').forEach((form) => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>('button');
+      const status = form.querySelector<HTMLElement>('.newsletter-form__status');
+      if (!button || !status) return;
+      button.disabled = true;
+      button.textContent = 'Joining…';
+      status.textContent = '';
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to subscribe.');
+        form.reset();
+        button.textContent = 'You’re on the list';
+        status.textContent = 'Thank you. We’ll share screening and release news by email.';
+      } catch (error) {
+        button.textContent = 'Try again';
+        status.textContent = error instanceof Error ? error.message : 'Unable to subscribe.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

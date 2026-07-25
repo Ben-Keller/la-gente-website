@@ -1,9 +1,76 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ChapterCard from '../components/ChapterCard.astro';
 import { chapters } from '../data/chapters';
+import { withBase } from '../utils/paths';
 ---
 <BaseLayout title="Chapters — La Gente de La Tierra" description="Explore the chapters, communities, and landscapes featured in La Gente de La Tierra.">
   <header class="page-hero page-shell"><p class="eyebrow">Across Peru</p><h1>Explore the<br />chapters.</h1><p class="lead">From the Pacific coast to the high Andes and the Amazon rainforest, every chapter begins with a distinct relationship to place.</p></header>
-  <section class="page-shell"><div class="chapter-grid chapter-grid--large">{chapters.map((chapter) => <ChapterCard chapter={chapter} />)}</div></section>
+  <section class="chapter-stories" aria-label="Documentary chapters">
+    {chapters.map((chapter, index) => (
+      <article class:list={['chapter-story', index % 2 && 'chapter-story--reverse']} data-chapter-story>
+        <img
+          class="chapter-story__image"
+          src={withBase(chapter.images.hero)}
+          alt={`${chapter.community}, ${chapter.region}`}
+          loading={index < 2 ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+        <div class="chapter-story__shade"></div>
+        <div class="chapter-story__inner page-shell">
+          <div class="chapter-story__content">
+            <div class="chapter-story__meta">
+              <span>Chapter {String(chapter.number).padStart(2, '0')}</span>
+              <span>{chapter.region} · {chapter.elevation}</span>
+            </div>
+            <p class="eyebrow">{chapter.eyebrow}</p>
+            <h2>{chapter.title}</h2>
+            <p class="chapter-story__community">{chapter.community}</p>
+            <p class="chapter-story__summary">{chapter.summary}</p>
+            <a class="chapter-story__link" href={withBase(`/${chapter.slug}/`)}>
+              <span>Enter chapter</span><span class="direction-mark direction-mark--light" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+      </article>
+    ))}
+  </section>
+  <script>
+    const storyCollection = document.querySelector('.chapter-stories');
+    const stories = Array.from(document.querySelectorAll('[data-chapter-story]'));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (storyCollection && stories.length) {
+      storyCollection.classList.add('is-enhanced');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        });
+      }, { threshold: 0.48, rootMargin: '0px 0px -8% 0px' });
+      stories.forEach((story) => observer.observe(story));
+
+      if (!reduceMotion.matches && window.matchMedia('(min-width: 801px)').matches) {
+        let ticking = false;
+        const updateParallax = () => {
+          const viewportCenter = window.innerHeight / 2;
+          stories.forEach((story) => {
+            if (!(story instanceof HTMLElement)) return;
+            const rect = story.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+            const offset = ((rect.top + rect.height / 2) - viewportCenter) * -0.34;
+            story.style.setProperty('--chapter-parallax', `${Math.max(-205, Math.min(205, offset))}px`);
+          });
+          ticking = false;
+        };
+        const requestParallax = () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateParallax);
+          }
+        };
+        updateParallax();
+        window.addEventListener('scroll', requestParallax, { passive: true });
+        window.addEventListener('resize', requestParallax);
+      }
+    }
+  </script>
 </BaseLayout>

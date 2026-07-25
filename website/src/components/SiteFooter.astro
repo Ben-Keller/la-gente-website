@@ -1,14 +1,25 @@
 ---
 import { withBase } from '../utils/paths';
+import NewsletterForm from './NewsletterForm.astro';
+import { footerNavigation, SITE, socialLinks } from '../data/site';
 ---
 <footer class="site-footer">
   <div>
     <p class="footer-mark">La Gente de La Tierra</p>
     <p>A documentary series about land, memory, and the communities shaping Peru.</p>
-    <p class="footer-production">A production of Aesthetic Voyager Films</p>
+    <p class="footer-production">A production of {SITE.productionCompany}</p>
   </div>
-  <div class="footer-links">
-    <a href={withBase('/about/')}>About</a><a href={withBase('/communities/')}>Chapters</a><a href={withBase('/get-involved/')}>Get involved</a><a href={withBase('/contact-us/')}>Contact</a>
+  <nav class="footer-links" aria-label="Footer navigation">
+    {footerNavigation.map(({ label, href }) => <a href={withBase(href)}>{label}</a>)}
+  </nav>
+  <div class="footer-newsletter">
+    <p class="eyebrow">Screening and release updates</p>
+    <NewsletterForm compact />
   </div>
-  <p class="footer-meta">© {new Date().getFullYear()} La Gente de La Tierra · Facebook · Twitter · Instagram · Vimeo</p>
+  <div class="footer-social">
+    {socialLinks.map(({ label, href }) => (
+      <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined}>{label}</a>
+    ))}
+  </div>
+  <p class="footer-meta">© {new Date().getFullYear()} {SITE.name} · {SITE.productionCompany} · All rights reserved.</p>
 </footer>

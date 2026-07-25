@@ -1,0 +1,35 @@
+---
+import type { Organization } from '../data/organizations';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  organizations: Organization[];
+}
+
+const mapOrganizations = Astro.props.organizations.map(({ name, place, coordinates, image }, index) => ({
+  index,
+  name,
+  place,
+  coordinates,
+  image: withBase(image),
+}));
+---
+<section
+  class="involvement-atlas"
+  aria-labelledby="atlas-title"
+  data-organizations={JSON.stringify(mapOrganizations)}
+  data-terrain={withBase('/images/maps/peru-terrain.webp')}
+>
+  <div class="involvement-atlas__copy">
+    <p class="eyebrow">Get involved · Across Peru</p>
+    <h1 id="atlas-title">Support local<br />community organizations.</h1>
+    <p class="involvement-atlas__lead">Explore organizations connected to the landscapes and communities in the series. Select a location to move directly into its story.</p>
+  </div>
+  <div class="involvement-map">
+    <svg id="peru-involvement-map" viewBox="0 0 760 760" role="img" aria-labelledby="map-title map-description">
+      <title id="map-title">Map of organizations across Peru</title>
+      <desc id="map-description">An interactive map centered on Peru with neighboring South American countries and organization locations.</desc>
+    </svg>
+    <div class="map-tooltip" role="status" aria-live="polite"></div>
+  </div>
+</section>

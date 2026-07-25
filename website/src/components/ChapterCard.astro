@@ -11,7 +11,7 @@ const { chapter } = Astro.props as { chapter: Chapter };
       <span>Chapter {String(chapter.number).padStart(2, '0')}</span>
       <h3>{chapter.title}</h3>
       <p>{chapter.community}</p>
-      <span class="text-link">Explore chapter <span aria-hidden="true">↗</span></span>
+      <span class="text-link">Explore chapter <span class="direction-mark" aria-hidden="true"></span></span>
     </div>
   </a>
 </article>
