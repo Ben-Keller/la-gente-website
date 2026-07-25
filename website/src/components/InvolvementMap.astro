@@ -19,11 +19,12 @@ const mapOrganizations = Astro.props.organizations.map(({ name, place, coordinat
   aria-labelledby="atlas-title"
   data-organizations={JSON.stringify(mapOrganizations)}
   data-terrain={withBase('/images/maps/peru-terrain.webp')}
+  style={`--involvement-background:url("${withBase('/images/recovered/GI-Main.webp')}")`}
 >
   <div class="involvement-atlas__copy">
-    <p class="eyebrow">Get involved · Across Peru</p>
+    <p class="eyebrow">Get involved</p>
     <h1 id="atlas-title">Support local<br />community organizations.</h1>
-    <p class="involvement-atlas__lead">Explore organizations connected to the landscapes and communities in the series. Select a location to move directly into its story.</p>
+    <p class="involvement-atlas__lead">Explore organizations connected to the landscapes and communities in the series across Peru. Select a location to explore its story.</p>
   </div>
   <div class="involvement-map">
     <svg id="peru-involvement-map" viewBox="0 0 760 760" role="img" aria-labelledby="map-title map-description">
