@@ -3,7 +3,7 @@ const { compact = false } = Astro.props;
 ---
 <form class:list={['newsletter-form', compact && 'newsletter-form--compact']} action="https://api.web3forms.com/submit" method="POST" data-newsletter-form>
   <input type="hidden" name="access_key" value="d158eeed-e3ae-4162-8a7a-4d6fb3663f04" />
-  <input type="hidden" name="subject" value="New La Gente release-update subscriber" />
+  <input type="hidden" name="subject" value="La Gente release-update request" />
   <input type="hidden" name="from_name" value="La Gente de La Tierra website" />
   <input type="hidden" name="subscription_type" value="Screening and release updates" />
   <input class="contact-botcheck" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" />
@@ -11,7 +11,7 @@ const { compact = false } = Astro.props;
     <span class="sr-only">Email address</span>
     <input type="email" name="email" autocomplete="email" placeholder="Email address" required />
   </label>
-  <button class="button" type="submit">Follow the release</button>
+  <button class="button" type="submit">Request release updates</button>
   <p class="newsletter-form__status" role="status" aria-live="polite"></p>
 </form>
 
@@ -23,7 +23,7 @@ const { compact = false } = Astro.props;
       const status = form.querySelector<HTMLElement>('.newsletter-form__status');
       if (!button || !status) return;
       button.disabled = true;
-      button.textContent = 'Joining…';
+      button.textContent = 'Sending…';
       status.textContent = '';
       try {
         const response = await fetch(form.action, {
@@ -32,13 +32,13 @@ const { compact = false } = Astro.props;
           headers: { Accept: 'application/json' },
         });
         const result = await response.json();
-        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to subscribe.');
+        if (!response.ok || !result.success) throw new Error(result.message || 'Unable to send your request.');
         form.reset();
-        button.textContent = 'You’re on the list';
-        status.textContent = 'Thank you. We’ll share screening and release news by email.';
+        button.textContent = 'Request received';
+        status.textContent = 'Thank you. Your request for release updates has been sent to the filmmakers.';
       } catch (error) {
         button.textContent = 'Try again';
-        status.textContent = error instanceof Error ? error.message : 'Unable to subscribe.';
+        status.textContent = error instanceof Error ? error.message : 'Unable to send your request.';
       } finally {
         button.disabled = false;
       }

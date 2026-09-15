@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const dist = new URL('../dist/', import.meta.url);
 const distPath = fileURLToPath(dist);
-const base = '/la-gente-website';
+const base = '';
 const requiredFiles = ['.nojekyll', '404.html', 'index.html', 'robots.txt', 'sitemap-index.xml'];
 const failures = [];
 
@@ -24,6 +24,9 @@ const urlAttribute = /\b(?:href|src|poster)=["']([^"'#]+)["']/g;
 
 for (const htmlFile of htmlFiles) {
   const html = readFileSync(htmlFile, 'utf8');
+  if (html.includes('ben-keller.github.io') || html.includes('/la-gente-website/')) {
+    failures.push(`${relative(distPath, htmlFile)} contains a legacy project-domain URL`);
+  }
   for (const match of html.matchAll(urlAttribute)) {
     const url = match[1];
     if (/^(?:[a-z]+:)?\/\//i.test(url) || url.startsWith('mailto:') || url.startsWith('data:')) continue;

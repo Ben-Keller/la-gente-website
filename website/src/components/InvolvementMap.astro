@@ -32,5 +32,9 @@ const mapOrganizations = Astro.props.organizations.map(({ name, place, coordinat
       <desc id="map-description">An interactive map centered on Peru with neighboring South American countries and organization locations.</desc>
     </svg>
     <div class="map-tooltip" role="status" aria-live="polite"></div>
+    <small class="map-location-note">Approximate locations</small>
   </div>
 </section>
+<style>
+  .map-location-note { display: block; text-align: center; color: var(--muted); font-size: .65rem; }
+</style>

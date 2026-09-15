@@ -29,7 +29,7 @@ const panelId = `organization-panel-${number}`;
         <a class="text-link" href={organization.url} target="_blank" rel="noreferrer">
           {organization.action}<span class="external-link-mark" aria-hidden="true">+</span>
         </a>
-        <p class="organization-accordion__placeholder">External destinations should be reviewed periodically for current programs and donation terms.</p>
+        {organization.linkNote && <p class="organization-accordion__placeholder">{organization.linkNote}</p>}
       </div>
     </div>
   </div>

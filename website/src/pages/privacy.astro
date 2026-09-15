@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+const analyticsEnabled = Boolean(import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN);
+// Launch review: owner must confirm retention practices and required operator details.
 ---
-<BaseLayout title="Privacy — La Gente de La Tierra" description="Placeholder privacy information for the La Gente de La Tierra website.">
+<BaseLayout title="Privacy — La Gente de La Tierra" description="How this website handles inquiries, update requests, and third-party services.">
   <header class="page-hero page-shell">
     <p class="eyebrow">Privacy</p><h1>Your information<br />and this website.</h1>
-    <p class="lead">This is an editorial placeholder and must be reviewed before final publication.</p>
+    <p class="lead">Information about contacting the filmmakers and the services used by this website.</p>
   </header>
   <article class="legal-copy page-shell">
-    <section><h2>Information we collect</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Contact and newsletter forms may collect a name, email address, organization, and message.</p></section>
-    <section><h2>How it is used</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Information is used to respond to inquiries and provide requested release or screening updates.</p></section>
-    <section><h2>Service providers</h2><p>Form submissions are processed by Web3Forms. Privacy-conscious analytics may be provided by Plausible after configuration.</p></section>
-    <section><h2>Retention and deletion</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. To request access or deletion, email aestheticvoyagerfilms@gmail.com.</p></section>
-    <p class="placeholder-note">Legal placeholder — review retention periods, consent language, service-provider terms, and applicable jurisdiction before launch.</p>
+    <section><h2>Information you send</h2><p>When you contact the filmmakers, the form sends the information you provide, such as your name, email address, organization, and message. Please do not include sensitive information that is not needed for your inquiry.</p></section>
+    <section><h2>Inquiries and update requests</h2><p>Contact submissions are sent to the filmmakers to respond to your inquiry. The release-update form sends an email request to the team; it does not create a website account or automatically confirm a mailing-list subscription.</p></section>
+    <section><h2>Service providers</h2><p>This site is hosted on GitHub Pages. Forms are processed by <a href="https://web3forms.com/privacy">Web3Forms</a> and delivered to the filmmakers’ Gmail inbox. Open Sans is loaded through Google Fonts. These services receive information necessary to process the requests made to them, subject to their own privacy practices.</p>{analyticsEnabled && <p>This website also uses Plausible for website analytics. See <a href="https://plausible.io/privacy">Plausible’s privacy information</a>.</p>}<p>Links to video platforms, organizations, and other external websites take you to services with their own privacy practices.</p></section>
+    <section><h2>Your information and requests</h2><p>Submitting a form creates an email record and may create records with the form provider. Closing the page does not delete those records. To ask about information you have sent, request a correction or deletion, or withdraw an email-update request, contact <a href="mailto:aestheticvoyagerfilms@gmail.com">aestheticvoyagerfilms@gmail.com</a>.</p></section>
   </article>
 </BaseLayout>

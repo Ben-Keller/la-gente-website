@@ -17,7 +17,6 @@ export const primaryNavigation = [
 
 export const footerNavigation = [
   ...primaryNavigation.slice(1),
-  { label: 'Watch & release', href: '/watch/' },
   { label: 'Contact', href: '/contact-us/' },
   { label: 'Privacy', href: '/privacy/' },
 ] as const;
@@ -26,6 +25,5 @@ export const socialLinks = [
   { label: 'Email', href: `mailto:${SITE.email}` },
   { label: 'Instagram', href: 'https://www.instagram.com/lagentedelatierra/' },
   { label: 'Facebook', href: 'https://www.facebook.com/lagentedelatierra/' },
-  { label: 'YouTube', href: 'https://www.youtube.com/@lagentedelatierra' },
-  { label: 'Vimeo', href: 'https://vimeo.com/' },
+  { label: 'Vimeo', href: 'https://vimeo.com/user125512734' },
 ] as const;

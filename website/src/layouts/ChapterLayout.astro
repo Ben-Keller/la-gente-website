@@ -14,25 +14,20 @@ const { chapter } = Astro.props as { chapter: Chapter };
   </section>
   <section class="chapter-intro page-shell narrow-grid">
     <div><p class="eyebrow">The story</p><h2>{chapter.eyebrow}</h2></div>
-    <div><p class="lead">{chapter.summary}</p><ul class="tag-list">{chapter.themes.map((theme) => <li>{theme}</li>)}</ul></div>
+    <div><p class="lead">{chapter.summary}</p>{chapter.story.map((paragraph) => <p>{paragraph}</p>)}<ul class="tag-list">{chapter.themes.map((theme) => <li>{theme}</li>)}</ul></div>
   </section>
   <section class="chapter-details page-shell">
-    <article><p class="eyebrow">Location</p><h2>{chapter.location}</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></article>
+    <article><p class="eyebrow">Location</p><h2>{chapter.location}</h2><p>{chapter.locationDescription}</p></article>
     <article><p class="eyebrow">Environmental focus</p><h2>Land, climate, and continuity</h2><p>{chapter.environmentalFocus}</p></article>
-    <article><p class="eyebrow">Production note</p><h2>Behind the chapter</h2><p>{chapter.productionNote}</p></article>
+    <article><p class="eyebrow">In this chapter</p><h2>A closer look</h2><p>{chapter.productionNote}</p></article>
   </section>
   <section class="image-pair page-shell">
-    <PlaceholderImage src={chapter.images.portrait} label={`${chapter.title} community portrait`} ratio="portrait" />
-    <PlaceholderImage src={chapter.images.landscape} label={`${chapter.title} landscape`} ratio="landscape" />
-  </section>
-  <section class="quote-section page-shell">
-    <p class="eyebrow">Field note</p>
-    <blockquote>“A place is not only seen. It is understood through the people who care for it.”</blockquote>
-    <p class="placeholder-note">Editorial placeholder — replace with a verified participant quotation.</p>
+    <PlaceholderImage src={chapter.images.portrait} label={`${chapter.title} — photograph from the series`} ratio="portrait" />
+    <PlaceholderImage src={chapter.images.landscape} label={chapter.number === 6 ? 'Archaeological ruins on Peru’s northern coast' : `${chapter.title} — landscape from the series`} ratio="landscape" />
   </section>
   <section class="chapter-watch page-shell">
-    <div class="youtube-placeholder" role="img" aria-label={`${chapter.title} chapter video placeholder`}>
-      <span>Chapter video</span><strong>YouTube placeholder</strong><small>Official clip forthcoming</small>
+    <div class="youtube-placeholder">
+      <span>The documentary series</span><strong>Coming October 2026</strong><p>Get a first look at the six-part journey across Peru.</p><a class="button" href={withBase('/#trailer')}>Watch the trailer</a>
     </div>
     <div><p class="eyebrow">Continue the story</p><h2>Support work connected to this place.</h2><p>Learn more about an organization related to the themes and geography of this chapter.</p><a class="button" href={chapter.relatedOrganizationUrl} target="_blank" rel="noreferrer">Visit {chapter.relatedOrganization}</a></div>
   </section>

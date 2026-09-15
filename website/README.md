@@ -1,6 +1,6 @@
 # La Gente de La Tierra
 
-Performance-first Astro website for the six-part documentary series. It is statically generated and configured for GitHub Pages at `ben-keller.github.io/la-gente-website/`.
+Performance-first Astro website for the six-part documentary series. It is statically generated and hosted by GitHub Pages at `https://lagentedelatierra.com/`, with Cloudflare DNS.
 
 ## Run locally
 
@@ -18,7 +18,7 @@ The repository workflow builds this Astro project and deploys it automatically a
 1. Commit the repository root, including this directory and `package-lock.json`.
 2. In **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source.
 3. Push to `main` or run **Deploy to GitHub Pages** manually.
-4. The production URL is `https://ben-keller.github.io/la-gente-website/`.
+4. The production URL is `https://lagentedelatierra.com/`. Set this custom domain in GitHub Pages settings; the Actions deployment does not require a CNAME file. Cloudflare's root records must point only to GitHub Pages, with `www` pointing to `ben-keller.github.io`.
 
 The GitHub Pages base path is centralized in `astro.config.mjs`; internal URLs and assets use `withBase()` from `src/utils/paths.ts`.
 

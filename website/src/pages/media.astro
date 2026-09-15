@@ -4,17 +4,18 @@ import PlaceholderImage from '../components/PlaceholderImage.astro';
 import { withBase } from '../utils/paths';
 import sharp from 'sharp';
 import path from 'node:path';
+import { galleryIds, galleryCaptions } from '../data/gallery';
 
-const gallery = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,20,22,23,24,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,44,45,46,47,49,50,51,52];
-const galleryImages = await Promise.all(gallery.map(async (number, index) => {
-  const src = `/images/gallery/media${number}.webp`;
+const galleryImages = await Promise.all(galleryIds.map(async (id, index) => {
+  const src = `/images/gallery/${id}.webp`;
   const metadata = await sharp(path.join(process.cwd(), 'public', src)).metadata();
 
   return {
     src,
     width: metadata.width ?? 1600,
     height: metadata.height ?? 1200,
-    alt: `La Gente de La Tierra recovered field photograph ${String(index + 1).padStart(2, '0')}`,
+    caption: galleryCaptions[id] ?? '',
+    alt: galleryCaptions[id] ?? `Photograph ${index + 1} from filming La Gente de La Tierra in Peru`,
   };
 }));
 ---
@@ -40,6 +41,7 @@ const galleryImages = await Promise.all(gallery.map(async (number, index) => {
             href={withBase(image.src)}
             data-pswp-width={image.width}
             data-pswp-height={image.height}
+            data-caption={image.caption}
             target="_blank"
             aria-label={`Open photograph ${index + 1} of ${galleryImages.length}`}
           >
@@ -70,6 +72,43 @@ const galleryImages = await Promise.all(gallery.map(async (number, index) => {
       showHideAnimationType: 'fade',
     });
 
+    lightbox.on('uiRegister', () => {
+      lightbox.pswp?.ui?.registerElement({
+        name: 'field-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        onInit: (element, pswp) => {
+          element.setAttribute('aria-live', 'polite');
+          pswp.on('change', () => {
+            const caption = pswp.currSlide?.data.element?.getAttribute('data-caption') ?? '';
+            element.textContent = caption;
+            element.hidden = !caption;
+          });
+        },
+      });
+    });
     lightbox.init();
   </script>
+  <style is:global>
+    .pswp__field-caption {
+      position: absolute;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: min(720px, calc(100% - 32px));
+      max-height: 25vh;
+      overflow: auto;
+      box-sizing: border-box;
+      padding: 10px 16px;
+      border-radius: 4px;
+      background: rgb(0 0 0 / 78%);
+      color: #fff;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+    }
+  </style>
 </BaseLayout>

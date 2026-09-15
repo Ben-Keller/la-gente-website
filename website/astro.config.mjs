@@ -2,14 +2,15 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://ben-keller.github.io',
-  base: '/la-gente-website',
+  site: 'https://lagentedelatierra.com',
+  base: '/',
   output: 'static',
   trailingSlash: 'always',
   compressHTML: true,
   integrations: [sitemap({
     filter: (page) => ![
       '/home/',
+      '/watch/',
       '/chapter-1/',
       '/chapter-2/',
       '/chapter-2-maras/',
