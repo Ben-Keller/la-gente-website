@@ -13,7 +13,7 @@ export const CONTENT_QUERY = defineQuery(`{
   "chapters": *[_type == "chapter"] | order(number asc){number,slug,title,community,region,elevation,eyebrow,summary,themes,location,locationDescription,story,environmentalFocus,productionNote,organization->{name,link},hero{${placement}},portrait{${placement}},landscape{${placement}},seo{title,description,image{${placement}}}},
   "organizations": *[_type == "organization"] | order(orderRank asc,order asc,_id asc){_id,name,category,place,location,description,link,linkNote,status,image{${placement}}},
   "people": *[_type == "person"] | order(orderRank asc,order asc,_id asc){_id,name,role,bio,shortBio,portrait{${placement}},teamGroup->{_id,title}},
-  "faqs": *[_type == "faq"] | order(order asc,_id asc){_id,question,answer},
+  "faqs": *[_type == "faq"] | order(orderRank asc,order asc,_id asc){_id,question,answer},
   "photographs": *[_type == "photograph" && gallery == true] | order(orderRank asc,order asc,_id asc){_id,title,caption,alt,credit,image{asset,crop,hotspot,"dimensions":asset->metadata.dimensions}},
   "videos": *[_type == "video"]{sourceKey,title,url,mimeType,poster{${placement}}}
 }`);

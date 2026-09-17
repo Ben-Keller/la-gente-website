@@ -20,7 +20,7 @@ export const structure: StructureResolver = (S, context) => S.list().title('La G
   S.documentTypeListItem('chapter').title('The six chapters'),
   organizationList(S, context),
   orderableDocumentListDeskItem({type: 'person', title: 'Filmmaking team', id: 'team', S, context}),
-  S.documentTypeListItem('faq').title('Questions & answers'),
+  orderableDocumentListDeskItem({type: 'faq', title: 'Questions & answers', id: 'faq', S, context}),
   S.listItem().id('photography').title('Photography').child(S.list().title('Photography').items([
     S.documentTypeListItem('photograph').title('All photographs'),
     orderableDocumentListDeskItem({type: 'photograph', title: 'Media selection', id: 'media-selection', filter: 'gallery == true', createIntent: false, S, context}),

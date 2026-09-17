@@ -1,9 +1,9 @@
-/** Add missing team/organization ranks, preserving imported order and editorial fields. */
+/** Add missing team/organization/FAQ ranks, preserving imported order and editorial fields. */
 import {getCliClient} from 'sanity/cli'
 import {LexoRank} from 'lexorank'
 
 const client = getCliClient({apiVersion: '2026-09-17'}).withConfig({projectId: '80rpogyy', dataset: 'production', useCdn: false, perspective: 'raw'})
-const type = process.argv.includes('--organizations') ? 'organization' : 'person'
+const type = process.argv.includes('--faqs') ? 'faq' : process.argv.includes('--organizations') ? 'organization' : 'person'
 const query = '*[_type == $type] | order(order asc, _id asc){_id,_rev,orderRank}'
 const people = await client.fetch(query, {type})
 const ranked = people.filter(p => p.orderRank)

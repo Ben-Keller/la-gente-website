@@ -75,7 +75,7 @@ const person = defineType({name: 'person', title: 'Team member', type: 'document
   prose('bio', 'Full biography'), prose('shortBio', 'Press biography'), picture('portrait', 'Portrait'),
   {...order, hidden: true, readOnly: true}, source,
 ], preview: {select: {title: 'name', subtitle: 'role', media: 'portrait.photograph.image'}}})
-const faq = defineType({name: 'faq', title: 'Frequently asked question', type: 'document', icon: HelpCircleIcon, groups, fields: [text('question', 'Question', true), prose('answer', 'Answer'), order, source], preview: {select: {title: 'question'}}})
+const faq = defineType({name: 'faq', title: 'Frequently asked question', type: 'document', icon: HelpCircleIcon, groups, orderings: [orderRankOrdering], fields: [orderRankField({type: 'faq'}), text('question', 'Question', true), prose('answer', 'Answer'), {...order, hidden: true, readOnly: true}, source], preview: {select: {title: 'question'}}})
 const video = defineType({name: 'video', title: 'Video', type: 'document', icon: PlayIcon, groups, fields: [
   text('title', 'Title', true),
   defineField({name: 'url', title: 'Video URL or existing site path', type: 'url', group: 'content', description: 'Use existing optimized clips or YouTube/Vimeo URLs. Video uploads to Sanity are disabled.', validation: r => r.required().uri({allowRelative: true, scheme: ['https']})}),
