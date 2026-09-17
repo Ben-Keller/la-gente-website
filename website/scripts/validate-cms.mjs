@@ -2,7 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {load} from 'cheerio';
 import assert from 'node:assert/strict';
-import {cms, plain, contentHash} from '../src/data/cms.mjs';
+import {cms, plain, contentHash, imageUrl} from '../src/data/cms.mjs';
 const normalize = value => value.replace(/\s+/g,' ').trim();
 for (const page of cms.pages) {
   const file = page.route === '/404.html' ? 'dist/404.html' : join('dist',page.route,'index.html');
@@ -15,6 +15,22 @@ for (const page of cms.pages) {
   }
   assert.equal($('head > title').text(), page.seo.title, `${page._id}: SEO title`);
   assert.equal($('template[data-cms-slot]').length,0);
+  for (const role of ['trailer', 'backgroundVideo']) {
+    if (!page[role]) continue;
+    const video = page[role];
+    const player = $(`[data-cms-video="${role}"]`);
+    // A removed page section intentionally removes its player too.
+    if (!player.length) continue;
+    if (player.is('a')) assert.equal(player.attr('href'), video.url);
+    else {
+      assert.deepEqual(player.find('source').map((_, n) => $(n).attr('src')).get(), [video.webmUrl, video.url].filter(Boolean));
+      assert.equal(player.attr('poster'), role === 'backgroundVideo' ? imageUrl(page.openingImages[0], 1920) : video.poster ? imageUrl(video.poster) : undefined);
+    }
+  }
+  if (page._id === 'homePage' && $('.home-hero').length) {
+    assert.deepEqual(JSON.parse($('.home-hero').attr('data-mobile-images')), page.openingImages.map(p => imageUrl(p, 1920)));
+    assert.equal($('.home-hero__poster').first().attr('src'), imageUrl(page.openingImages[0], 1920));
+  }
 }
 const media=load(await readFile('dist/media/index.html','utf8'));
 assert.equal(media('#media-gallery li').length,cms.photographs.length);

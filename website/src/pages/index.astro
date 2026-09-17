@@ -18,7 +18,7 @@ const mobileHeroImages = [
   <section class="home-hero" data-mobile-images={JSON.stringify(mobileHeroImages)}>
     <img class="home-hero__poster" src={withBase('/images/hero-poster.webp')} alt="" width="1920" height="1080" fetchpriority="high" decoding="async" />
     <img class="home-hero__poster home-hero__poster--alternate" src={withBase('/images/gallery/media5.webp')} alt="" width="1600" height="898" loading="lazy" decoding="async" />
-    <video class="home-hero__video" autoplay muted loop playsinline preload="metadata" poster={withBase('/images/hero-poster.webp')} aria-hidden="true">
+    <video data-cms-video="backgroundVideo" class="home-hero__video" autoplay muted loop playsinline preload="metadata" poster={withBase('/images/hero-poster.webp')} aria-hidden="true">
       <source src={withBase('/video/stripey-vlc.webm')} type="video/webm" media="(min-width: 801px)" />
       <source src={withBase('/video/stripey-vlc.mp4')} type="video/mp4" media="(min-width: 801px)" />
     </video>
@@ -34,7 +34,7 @@ const mobileHeroImages = [
   </script>
   <section class="documentary-feature page-shell" id="trailer">
     <div class="trailer-frame">
-      <video controls playsinline preload="metadata" poster={withBase('/images/gallery/media23.webp')}>
+      <video data-cms-video="trailer" controls playsinline preload="metadata" poster={withBase('/images/gallery/media23.webp')}>
         <source src={withBase('/video/trailer-vertical.mp4')} type="video/mp4" />
       </video>
     </div>

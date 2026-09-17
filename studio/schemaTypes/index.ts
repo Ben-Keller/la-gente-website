@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {PageShortcuts} from '../src/PageShortcuts'
+import {SharedContent, PlacementInput, SectionInput, VideoReferenceInput} from '../src/SharedContent'
 import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {ImageIcon} from '@sanity/icons/Image'
@@ -9,7 +10,7 @@ import {HelpCircleIcon} from '@sanity/icons/HelpCircle'
 import {CogIcon} from '@sanity/icons/Cog'
 import {PinIcon} from '@sanity/icons/Pin'
 
-const groups = [{name: 'content', title: 'Story & copy', default: true}, {name: 'media', title: 'Photography'}, {name: 'details', title: 'Details & relationships'}]
+const groups = [{name: 'content', title: 'Story & copy', default: true}, {name: 'media', title: 'Images & videos'}, {name: 'details', title: 'Details & relationships'}]
 const source = defineField({name: 'sourceKey', title: 'Migration source', type: 'string', readOnly: true, group: 'details'})
 const text = (name: string, title: string, required = false) => defineField({name, title, type: 'string', group: 'content', validation: r => required ? r.required() : r})
 const prose = (name: string, title: string) => defineField({name, title, type: 'richText', group: 'content'})
@@ -27,16 +28,23 @@ const link = defineType({name: 'siteLink', title: 'Link', type: 'object', icon: 
   })}),
 ]})
 const richText = defineType({name: 'richText', title: 'Text', type: 'array', of: [defineArrayMember({type: 'block', styles: [{title: 'Paragraph', value: 'normal'}, {title: 'Small heading', value: 'h3'}, {title: 'Quote', value: 'blockquote'}], lists: [{title: 'Bulleted list', value: 'bullet'}, {title: 'Numbered list', value: 'number'}], marks: {decorators: [{title: 'Strong', value: 'strong'}, {title: 'Emphasis', value: 'em'}], annotations: [defineArrayMember({name: 'link', type: 'object', title: 'Link', fields: [defineField({name: 'href', type: 'url', validation: r => r.uri({allowRelative: true, scheme: ['https', 'mailto', 'tel']})})]})]}})]})
-const imagePlacement = defineType({name: 'imagePlacement', title: 'Photograph placement', type: 'object', icon: ImageIcon, fields: [
+const imagePlacement = defineType({name: 'imagePlacement', title: 'Photograph placement', type: 'object', icon: ImageIcon, components: {input: PlacementInput}, fields: [
   defineField({name: 'photograph', title: 'Choose from the collection', type: 'reference', to: [{type: 'photograph'}], validation: r => r.required()}),
   defineField({name: 'alt', title: 'Alternative text for this placement', type: 'string', description: 'Describe the image’s purpose here. Leave empty to use the photograph’s description.'}),
+  defineField({name: 'localFraming', title: 'Crop & focal point for this placement only', type: 'image', options: {hotspot: true}, hidden: ({value}) => !value, description: 'Edit crop/focal point, not the file. If the shared photograph is replaced, its new crop is used until you reset local framing.', validation: r => r.custom(async (value, context) => {
+    if (!value?.asset?._ref) return true
+    const parent = context.parent as {photograph?: {_ref?: string}}
+    if (!parent?.photograph?._ref) return 'Choose a photograph first.'
+    const asset = await context.getClient({apiVersion: '2026-09-17'}).fetch('*[_id == $id][0].image.asset._ref', {id: parent.photograph._ref})
+    return asset === value.asset._ref || 'The shared photograph changed. Reset local crop or use shared crop instead.'
+  })}),
 ], preview: {select: {title: 'photograph.title', media: 'photograph.image'}}})
 const seo = defineType({name: 'seo', title: 'Search & sharing', type: 'object', icon: DocumentTextIcon, fields: [
   defineField({name: 'title', title: 'Search title', type: 'string', validation: r => r.max(70).warning()}),
   defineField({name: 'description', title: 'Search description', type: 'text', rows: 3, validation: r => r.max(180).warning()}),
   defineField({name: 'image', title: 'Sharing photograph', type: 'imagePlacement'}),
 ]})
-const photograph = defineType({name: 'photograph', title: 'Photograph', type: 'document', icon: ImageIcon, groups, orderings: [orderRankOrdering], fields: [
+const photograph = defineType({name: 'photograph', title: 'Photograph', type: 'document', icon: ImageIcon, components: {input: SharedContent}, groups, orderings: [orderRankOrdering], fields: [
   orderRankField({type: 'photograph'}),
   text('title', 'Collection title', true),
   defineField({name: 'image', title: 'Image / crop / focal point', type: 'image', group: 'media', options: {hotspot: true}, validation: r => r.required()}),
@@ -76,17 +84,22 @@ const person = defineType({name: 'person', title: 'Team member', type: 'document
   {...order, hidden: true, readOnly: true}, source,
 ], preview: {select: {title: 'name', subtitle: 'role', media: 'portrait.photograph.image'}}})
 const faq = defineType({name: 'faq', title: 'Frequently asked question', type: 'document', icon: HelpCircleIcon, groups, orderings: [orderRankOrdering], fields: [orderRankField({type: 'faq'}), text('question', 'Question', true), prose('answer', 'Answer'), {...order, hidden: true, readOnly: true}, source], preview: {select: {title: 'question'}}})
-const video = defineType({name: 'video', title: 'Video', type: 'document', icon: PlayIcon, groups, fields: [
+const video = defineType({name: 'video', title: 'Video', type: 'document', icon: PlayIcon, components: {input: SharedContent}, groups, fields: [
   text('title', 'Title', true),
   defineField({name: 'url', title: 'Video URL or existing site path', type: 'url', group: 'content', description: 'Use existing optimized clips or YouTube/Vimeo URLs. Video uploads to Sanity are disabled.', validation: r => r.required().uri({allowRelative: true, scheme: ['https']})}),
-  text('mimeType', 'Format'), picture('poster', 'Poster'), source,
+  defineField({name: 'webmUrl', title: 'Alternative WebM format (optional)', type: 'url', group: 'content', description: 'The same clip in WebM, not a second video record.', validation: r => r.uri({allowRelative: true, scheme: ['https']})}),
+  text('mimeType', 'Primary format'),
+  defineField({name: 'purpose', title: 'Purpose', type: 'string', group: 'details', options: {list: [{title: 'Background clip (opening image is controlled on Home)', value: 'background'}, {title: 'Trailer or other video', value: 'video'}]}, initialValue: 'video'}),
+  {...picture('poster', 'Default poster'), hidden: ({document}) => document?.purpose === 'background', description: 'Shared by all uses of this video. The Home background uses the first Opening image instead.'},
+  defineField({name: 'supersededBy', type: 'reference', to: [{type: 'video'}], hidden: true, readOnly: true}), source,
 ], preview: {select: {title: 'title', subtitle: 'url'}}})
-const section = defineType({name: 'contentSection', title: 'Page section', type: 'object', icon: DocumentTextIcon, fields: [
+const section = defineType({name: 'contentSection', title: 'Page section', type: 'object', icon: DocumentTextIcon, components: {input: SectionInput}, fields: [
+  defineField({name: 'kind', title: 'Section purpose', type: 'string', readOnly: true, hidden: true}),
   defineField({name: 'label', title: 'Editor label', type: 'string', validation: r => r.required()}),
   defineField({name: 'heading', title: 'Heading', type: 'string'}), defineField({name: 'eyebrow', title: 'Eyebrow', type: 'string'}),
   defineField({name: 'body', title: 'Copy', type: 'richText'}),
   defineField({name: 'links', title: 'Calls to action', type: 'array', of: [defineArrayMember({type: 'siteLink'})]}),
-  defineField({name: 'images', title: 'Photographs', type: 'array', of: [defineArrayMember({type: 'imagePlacement'})]}),
+  defineField({name: 'images', title: 'Photographs in this section', type: 'array', of: [defineArrayMember({type: 'imagePlacement'})], hidden: ({parent}) => ['opening', 'team', 'chapters', 'faqs', 'organizations', 'gallery'].includes(parent?.kind), readOnly: ({parent}) => ['opening', 'team', 'chapters', 'faqs', 'organizations', 'gallery'].includes(parent?.kind)}),
   defineField({name: 'sourceSelector', title: 'Source section', type: 'string', readOnly: true, hidden: true}),
 ], preview: {select: {title: 'label', subtitle: 'heading'}}})
 export const pageDefinitions = [
@@ -98,7 +111,10 @@ const pages = pageDefinitions.map(([name, title, route]) => defineType({name, ti
   text('title', 'Page name', true), defineField({name: 'route', title: 'Website route', type: 'string', group: 'details', readOnly: true, initialValue: route}),
   defineField({name: 'seo', type: 'seo', group: 'details'}),
   defineField({name: 'sections', title: 'Sections in page order', type: 'array', group: 'content', of: [defineArrayMember({type: 'contentSection'})], description: 'Shared chapter, organization and team stories are edited in their own collections.'}),
-  defineField({name: 'featuredImages', title: 'Featured / slideshow photographs', type: 'array', group: 'media', of: [defineArrayMember({type: 'imagePlacement'})]}), source,
+  ...(name === 'homePage' ? [defineField({name: 'openingImages', title: 'Opening image & mobile slideshow', type: 'array', group: 'media', of: [defineArrayMember({type: 'imagePlacement'})], description: 'First image: desktop loading cover and video poster. Mobile: all images rotate in this order, with no video. Drag to reorder.', validation: r => r.required().min(1)})] : []),
+  ...(['homePage', 'mediaPage'].includes(name) ? [defineField({name: 'trailer', title: 'Trailer · shared video', type: 'reference', to: [{type: 'video'}], components: {input: VideoReferenceInput}, group: 'media', options: {filter: '!defined(supersededBy)'}, description: 'Video selection for this page. Edit the selected shared video to update its source/poster everywhere.', validation: r => r.required()})] : []),
+  ...(name === 'homePage' ? [defineField({name: 'backgroundVideo', title: 'Background video · shared clip', type: 'reference', to: [{type: 'video'}], components: {input: VideoReferenceInput}, group: 'media', options: {filter: '!defined(supersededBy) && purpose == "background"'}, description: 'Desktop only. Both formats belong to one video. Its loading poster comes from Opening image above.', validation: r => r.required()})] : []),
+  defineField({name: 'featuredImages', title: 'Legacy slideshow selection', type: 'array', group: 'media', hidden: true, readOnly: true, deprecated: {reason: 'Use Opening image & mobile slideshow on Home.'}, of: [defineArrayMember({type: 'imagePlacement'})]}), source,
 ], preview: {select: {title: 'title'}, prepare: ({title: t}) => ({title: t || title, subtitle: route})}}))
 const siteSettings = defineType({name: 'siteSettings', title: 'Site identity & navigation', type: 'document', icon: CogIcon, groups, fields: [
   text('name', 'Website title', true), text('alternateName', 'English title'), text('description', 'Default description'), text('productionCompany', 'Production company'),

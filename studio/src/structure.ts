@@ -25,5 +25,5 @@ export const structure: StructureResolver = (S, context) => S.list().title('La G
     S.documentTypeListItem('photograph').title('All photographs'),
     orderableDocumentListDeskItem({type: 'photograph', title: 'Media selection', id: 'media-selection', filter: 'gallery == true', createIntent: false, S, context}),
   ])),
-  S.documentTypeListItem('video').title('Videos & trailer'),
+  S.listItem().id('video').title('Videos & trailer').child(S.documentTypeList('video').title('Videos & trailer').filter('_type == "video" && !defined(supersededBy)')),
 ])

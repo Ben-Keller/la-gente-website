@@ -15,32 +15,6 @@
 export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
-export type Video = {
-  _id: string
-  _type: 'video'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  title?: string
-  url?: string
-  mimeType?: string
-  poster?: ImagePlacement
-  sourceKey?: string
-}
-
-export type PhotographReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'photograph'
-}
-
-export type ImagePlacement = {
-  _type: 'imagePlacement'
-  photograph?: PhotographReference
-  alt?: string
-}
-
 export type Faq = {
   _id: string
   _type: 'faq'
@@ -95,6 +69,33 @@ export type Person = {
   portrait?: ImagePlacement
   order?: number
   sourceKey?: string
+}
+
+export type PhotographReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'photograph'
+}
+
+export type SanityImageAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
+
+export type ImagePlacement = {
+  _type: 'imagePlacement'
+  photograph?: PhotographReference
+  alt?: string
+  localFraming?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
 }
 
 export type TeamGroup = {
@@ -201,6 +202,13 @@ export type ContactPage = {
   sourceKey?: string
 }
 
+export type VideoReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'video'
+}
+
 export type MediaPage = {
   _id: string
   _type: 'mediaPage'
@@ -215,6 +223,7 @@ export type MediaPage = {
       _key: string
     } & ContentSection
   >
+  trailer?: VideoReference
   featuredImages?: Array<
     {
       _key: string
@@ -303,11 +312,34 @@ export type HomePage = {
       _key: string
     } & ContentSection
   >
+  openingImages?: Array<
+    {
+      _key: string
+    } & ImagePlacement
+  >
+  trailer?: VideoReference
+  backgroundVideo?: VideoReference
   featuredImages?: Array<
     {
       _key: string
     } & ImagePlacement
   >
+  sourceKey?: string
+}
+
+export type Video = {
+  _id: string
+  _type: 'video'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  url?: string
+  webmUrl?: string
+  mimeType?: string
+  purpose?: 'background' | 'video'
+  poster?: ImagePlacement
+  supersededBy?: VideoReference
   sourceKey?: string
 }
 
@@ -344,6 +376,7 @@ export type SiteSettings = {
 
 export type ContentSection = {
   _type: 'contentSection'
+  kind?: string
   label?: string
   heading?: string
   eyebrow?: string
@@ -359,13 +392,6 @@ export type ContentSection = {
     } & ImagePlacement
   >
   sourceSelector?: string
-}
-
-export type SanityImageAssetReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
 export type ChapterReference = {
@@ -469,12 +495,6 @@ export type Geopoint = {
   alt?: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current?: string
-  source?: string
-}
-
 export type SanityImageCrop = {
   _type: 'sanity.imageCrop'
   top?: number
@@ -489,6 +509,12 @@ export type SanityImageHotspot = {
   y?: number
   height?: number
   width?: number
+}
+
+export type Slug = {
+  _type: 'slug'
+  current?: string
+  source?: string
 }
 
 export type SanityImagePaletteSwatch = {
@@ -582,27 +608,28 @@ export type SanityImageAsset = {
 }
 
 export type AllSanitySchemaTypes =
-  | Video
-  | PhotographReference
-  | ImagePlacement
   | Faq
   | RichText
   | TeamGroupReference
   | Person
+  | PhotographReference
+  | SanityImageAssetReference
+  | ImagePlacement
   | TeamGroup
   | NotFoundPage
   | Seo
   | PrivacyPage
   | PressPage
   | ContactPage
+  | VideoReference
   | MediaPage
   | InvolvementPage
   | ChaptersPage
   | AboutPage
   | HomePage
+  | Video
   | SiteSettings
   | ContentSection
-  | SanityImageAssetReference
   | ChapterReference
   | Photograph
   | OrganizationReference
@@ -610,9 +637,9 @@ export type AllSanitySchemaTypes =
   | Organization
   | SiteLink
   | Geopoint
-  | Slug
   | SanityImageCrop
   | SanityImageHotspot
+  | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions

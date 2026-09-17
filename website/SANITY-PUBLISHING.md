@@ -11,6 +11,18 @@ Project `80rpogyy`, public `production` dataset. The Astro build uses only the `
 
 ## Bindings
 
+### Where to edit shared content
+
+- **Home → Images & videos → Opening image & mobile slideshow** owns the loading cover, background-video poster and ordered mobile slideshow. The first image is the desktop cover. Legacy section/slideshow fields are retained but hidden.
+- **Home / Media → Images & videos → Trailer** selects a shared video. **Home → Background video** selects one clip with a primary URL and optional WebM format. Video matching no longer depends on migration paths. Background clips require direct playable URLs; trailer links may use YouTube/Vimeo.
+- **Videos & trailer** owns the shared source URLs and trailer poster. The old separate WebM document is retained for recovery but hidden from the active list.
+- **Filmmaking team** owns biographies and portrait selections. **Photography** owns original photographs and their default framing. Shared-item panels show referencing records and known page uses, with edit links.
+- A photograph placement can use **Customize crop for this placement**, which copies only an asset reference and framing, not the file. Use the native crop/focal-point editor. The original stays shared. If the photo is replaced, stale local framing is ignored until reset; validation explains how to reset it.
+- Page sections with shared collections show collection shortcuts rather than duplicate image lists. Their headings and introductory copy remain page-specific. New bespoke layouts still require code.
+- Publish shared photographs/videos separately from the page that references them. Reference editing changes the shared record; selecting a different reference changes only that placement.
+
+The additive migration is `studio/scripts/consolidate-shared-content.mjs` (dry-run by default). Its `--execute` mode writes a private local recovery snapshot before a revision-guarded transaction and verifies original section copy and media selections are unchanged. Never commit these snapshots.
+
 `src/data/cms.mjs` fetches the published projection. `prepare-cms.mjs` freezes one snapshot for all rendering and validation. Core collections render through Astro components; `apply-cms-pages.mjs` binds imported page sections to their existing designed shells at build time. Section copy, rich text, links, photographs and order are CMS-owned. New sections get a basic text-section shell. Preserve hidden `sourceSelector` values when changing existing sections. New bespoke layouts need code changes, not arbitrary HTML in the CMS.
 
 Gallery order and selection, team order, organization list/map order, shared navigation, page SEO, chapter SEO, slideshow selections, video sources and poster images are bound. Video binaries remain outside Sanity. External YouTube/Vimeo URLs use privacy-friendly click-through links rather than autoplay embeds.

@@ -1,7 +1,7 @@
 /** Build-time adapter for the migrated page sections. Keeps the hand-designed shells
  * and animation hooks; CMS owns section order, copy, links and photograph placements.
  */
-import {readFile, writeFile, readdir} from 'node:fs/promises';
+import {readFile, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {load} from 'cheerio';
 import {cms, imageUrl, rich, safeLink, contentHash} from '../src/data/cms.mjs';
@@ -38,6 +38,8 @@ function applySection($, root, section) {
     target.attr('href', safeLink(link.href)).text(link.label).append(decorations);
   });
   links.slice((section.links || []).length).forEach(node => $(node).remove());
+  // These collections own their own image selections; legacy section images stay archived.
+  if (['opening','team','chapters','faqs','organizations','gallery'].includes(section.kind)) return;
   const images = editable('img').toArray();
   (section.images || []).forEach((placement, i) => {
     const target = images[i] ? $(images[i]) : $('<img loading="lazy" decoding="async">').appendTo(root);
@@ -72,8 +74,8 @@ for (const page of cms.pages) {
   }
   slots.forEach(slot => slot.remove());
   if (page._id === 'homePage') {
-    if (page.featuredImages?.length) {
-      const urls = page.featuredImages.map(p => imageUrl(p, 1920));
+    if (page.openingImages?.length) {
+      const urls = page.openingImages.map(p => imageUrl(p, 1920));
       $('.home-hero').attr('data-mobile-images', JSON.stringify(urls));
       $('.home-hero__poster').attr('src', urls[0]);
       $('.home-hero__poster--alternate').attr('src', urls[1] || urls[0]);
@@ -83,30 +85,35 @@ for (const page of cms.pages) {
     }
     $('.release-strip .eyebrow').text(cms.settings.releaseLabel);
   }
-  await writeFile(file, $.html());
-  report.pages.push({id: page._id, route: page.route, sections: page.sections?.length || 0});
-}
-
-async function files(dir) {return (await Promise.all((await readdir(dir,{withFileTypes:true})).map(entry => entry.isDirectory() ? files(join(dir,entry.name)) : join(dir,entry.name)))).flat();}
-for (const file of (await files('dist')).filter(path => path.endsWith('.html'))) {
-  const $ = load(await readFile(file,'utf8'));
-  for (const video of cms.videos) {
-    const sourcePath = video.sourceKey?.replace(/^video:/,'');
-    if (!sourcePath) continue;
-    $(`source[src="${sourcePath}"]`).each((_, source) => {
-      const parent = $(source).parent('video');
+  $('video[data-cms-video]').each((_, node) => {
+      const parent = $(node);
+      const role = parent.attr('data-cms-video');
+      const video = page[role];
+      if (!video?.url) throw new Error(`Missing published ${role} on ${page._id}`);
       const url = safeLink(video.url);
-      if (/youtube\.com|youtu\.be|vimeo\.com/.test(new URL(url, 'https://lagentedelatierra.com').hostname)) {
+      if (/(^|\.)(youtube\.com|youtu\.be|vimeo\.com)$/.test(new URL(url, 'https://lagentedelatierra.com').hostname)) {
+        if (role === 'backgroundVideo') throw new Error('A background video needs a direct playable clip URL.');
         // Privacy-friendly click-through for external players; do not autoplay embeds.
-        const link = $('<a class="button" target="_blank" rel="noreferrer"></a>').attr('href',url).text(video.title);
+        const link = $('<a class="button" target="_blank" rel="noreferrer"></a>').attr('href',url).attr('data-cms-video', role).text(video.title);
         parent.replaceWith(link);
       } else {
-        $(source).attr('src',url).attr('type',video.mimeType || 'video/mp4');
+        parent.find('source').remove();
+        for (const [src, type] of [[video.webmUrl, 'video/webm'], [url, video.mimeType || 'video/mp4']]) {
+          if (!src) continue;
+          const source = $('<source>').attr('src', safeLink(src)).attr('type', type);
+          if (role === 'backgroundVideo') source.attr('media', '(min-width: 801px)');
+          parent.append(source);
+        }
         if (video.poster) parent.attr('poster',imageUrl(video.poster));
+        else parent.removeAttr('poster');
+        if (role === 'backgroundVideo') {
+          if (!page.openingImages?.length) throw new Error('Home needs an opening image.');
+          parent.attr('poster', imageUrl(page.openingImages[0], 1920));
+        }
       }
-    });
-  }
+  });
   await writeFile(file,$.html());
+  report.pages.push({id: page._id, route: page.route, sections: page.sections?.length || 0});
 }
 await writeFile('dist/cms-version.json', JSON.stringify(report,null,2));
 console.log(`Applied Sanity page content: ${report.pages.length} pages; snapshot ${contentHash}`);
