@@ -7,6 +7,12 @@ const implicitPages: Record<string, string[]> = {
   person: ['About', 'Press kit'], chapter: ['Home', 'Chapters', 'Chapter detail'],
   organization: ['Get involved', 'Related chapter'], faq: ['About'], siteSettings: ['All pages'],
 }
+// Retained migration fields must not report a photograph as still in active use.
+const activeReference = (id: string) => `references(${id}) && !defined(supersededBy) && select(
+  _type match "*Page" => (${id} in openingImages[].photograph._ref || ${id} == seo.image.photograph._ref || ${id} == trailer._ref || ${id} == backgroundVideo._ref || ${id} in sections[!(kind in ["opening","team","chapters","faqs","organizations","gallery"])].images[].photograph._ref),
+  _type == "video" => purpose != "background" && poster.photograph._ref == ${id},
+  true
+)`
 
 export function SharedContent(props: ObjectInputProps) {
   const client = useClient({apiVersion: '2026-09-17'})
@@ -16,7 +22,7 @@ export function SharedContent(props: ObjectInputProps) {
   useEffect(() => {
     if (!id) return
     let active = true
-    const refresh = () => client.fetch<Usage[]>(`*[references($id) && !defined(supersededBy)]{_id,_type,title,name,"parents": *[references(^._id) && !defined(supersededBy)]{_id,_type,title,name}}`, {id}, {perspective: 'raw'})
+    const refresh = () => client.fetch<Usage[]>(`*[${activeReference('$id')}]{_id,_type,title,name,"parents": *[${activeReference('^._id')}]{_id,_type,title,name}}`, {id}, {perspective: 'raw'})
       .then(items => {if (active) {setUses(items); setStatus(items.length ? '' : 'No explicit references yet.')}})
       .catch(() => {if (active) setStatus('Usage could not be loaded. Retry by reopening this item.')})
     refresh()
