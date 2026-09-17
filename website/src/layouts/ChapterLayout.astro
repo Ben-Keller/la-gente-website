@@ -3,7 +3,9 @@ import BaseLayout from './BaseLayout.astro';
 import PlaceholderImage from '../components/PlaceholderImage.astro';
 import type { Chapter } from '../data/chapters';
 import { withBase } from '../utils/paths';
+import {cms, rich} from '../data/cms.mjs';
 const { chapter } = Astro.props as { chapter: Chapter };
+const story = cms.chapters.find(item => item.number === chapter.number);
 ---
 <BaseLayout title={`${chapter.title} — La Gente de La Tierra`} description={chapter.summary}>
   <section class="chapter-hero page-shell">
@@ -14,7 +16,7 @@ const { chapter } = Astro.props as { chapter: Chapter };
   </section>
   <section class="chapter-intro page-shell narrow-grid">
     <div><p class="eyebrow">The story</p><h2>{chapter.eyebrow}</h2></div>
-    <div><p class="lead">{chapter.summary}</p>{chapter.story.map((paragraph) => <p>{paragraph}</p>)}<ul class="tag-list">{chapter.themes.map((theme) => <li>{theme}</li>)}</ul></div>
+    <div><p class="lead">{chapter.summary}</p><div set:html={rich(story.story)} /><ul class="tag-list">{chapter.themes.map((theme) => <li>{theme}</li>)}</ul></div>
   </section>
   <section class="chapter-details page-shell">
     <article><p class="eyebrow">Location</p><h2>{chapter.location}</h2><p>{chapter.locationDescription}</p></article>
@@ -27,7 +29,7 @@ const { chapter } = Astro.props as { chapter: Chapter };
   </section>
   <section class="chapter-watch page-shell">
     <div class="youtube-placeholder">
-      <span>The documentary series</span><strong>Coming October 2026</strong><p>Get a first look at the six-part journey across Peru.</p><a class="button" href={withBase('/#trailer')}>Watch the trailer</a>
+      <span>The documentary series</span><strong>{cms.settings.releaseLabel}</strong><p>Get a first look at the six-part journey across Peru.</p><a class="button" href={withBase('/#trailer')}>Watch the trailer</a>
     </div>
     <div><p class="eyebrow">Continue the story</p><h2>Support work connected to this place.</h2><p>Learn more about an organization related to the themes and geography of this chapter.</p><a class="button" href={chapter.relatedOrganizationUrl} target="_blank" rel="noreferrer">Visit {chapter.relatedOrganization}</a></div>
   </section>

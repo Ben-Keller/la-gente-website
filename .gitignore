@@ -15,7 +15,20 @@
 website/node_modules/
 website/dist/
 website/.astro/
+website/.cms/
 website/*.log
 website/.env
 website/.env.*
 !website/.env.example
+
+# Sanity Studio and repeatable migration state
+studio/node_modules/
+studio/dist/
+studio/.sanity/
+studio/.env*
+!studio/.env.example
+migration/extracted/
+migration/transformed/
+migration/state/
+studio/schema.json
+studio/*.tsbuildinfo

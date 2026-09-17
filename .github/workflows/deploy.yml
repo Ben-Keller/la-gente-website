@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '3-58/5 * * * *'
 
 permissions:
   contents: read
@@ -12,25 +14,52 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      deploy: ${{ steps.decision.outputs.deploy }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install, build, and upload site
-        uses: withastro/action@v6
+      - uses: actions/setup-node@v4
         with:
-          path: ./website
           node-version: 24
-          package-manager: npm
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+        working-directory: website
+      - name: Check published content
+        id: content
+        if: github.event_name == 'schedule'
+        run: node scripts/check-cms.mjs
+        working-directory: website
+      - name: Decide whether to deploy
+        id: decision
+        env:
+          EVENT: ${{ github.event_name }}
+          CHANGED: ${{ steps.content.outputs.changed }}
+        run: |
+          if [ "$EVENT" != "schedule" ] || [ "$CHANGED" = "true" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build and validate published snapshot
+        if: steps.decision.outputs.deploy == 'true'
+        run: npm run build
+        working-directory: website
+      - name: Upload Pages artifact
+        if: steps.decision.outputs.deploy == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/dist
 
   deploy:
     needs: build
+    if: needs.build.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:

@@ -6,8 +6,12 @@ import { withBase, withoutBase } from '../utils/paths';
 import bebasNeueUrl from '../assets/fonts/BebasNeue-Regular.woff2?url';
 import { chapters } from '../data/chapters';
 import { SITE } from '../data/site';
+import {cms, imageUrl} from '../data/cms.mjs';
 interface Props { title: string; description: string; }
-const { title, description } = Astro.props;
+const chapterSeo = cms.chapters.find(chapter => `/${chapter.slug.current}/` === Astro.url.pathname)?.seo;
+const title = chapterSeo?.title || Astro.props.title;
+const description = chapterSeo?.description || Astro.props.description;
+const sharingImage = chapterSeo?.image ? imageUrl(chapterSeo.image) : SITE.defaultImage;
 const canonical = new URL(withBase(withoutBase(Astro.url.pathname)), Astro.site);
 const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
 const structuredData = {
@@ -54,7 +58,7 @@ const structuredData = {
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={SITE.name} />
-    <meta property="og:image" content={new URL(withBase(SITE.defaultImage), Astro.site)} />
+    <meta property="og:image" content={new URL(withBase(sharingImage), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     {plausibleDomain && <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js"></script>}

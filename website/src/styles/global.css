@@ -355,7 +355,7 @@ blockquote { font-family:var(--display); font-size:clamp(2.5rem,5vw,5rem); line-
   .gallery-grid { columns:2; }
   .feature-band { padding-block:5rem; }
   .involvement-atlas { width:min(100% - 32px,1360px); min-height:0; grid-template-columns:1fr; gap:1rem; margin-bottom:5rem; padding-block:3rem; }
-  .involvement-atlas__copy h1 { font-size:clamp(3.6rem,16vw,5.3rem); }
+  .involvement-atlas__copy h1 { font-size:clamp(2.5rem,12vw,5.3rem); overflow-wrap:anywhere; }
   .involvement-map { margin-inline:-8px; }
   .organization-accordions__intro { grid-template-columns:1fr; gap:.3rem; }
   .organization-accordions__intro>p:last-child { justify-self:start; }

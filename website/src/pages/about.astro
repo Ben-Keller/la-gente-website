@@ -1,32 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/PlaceholderImage.astro';
-const team = [
-  {
-    name: 'Mitchell Tijerina',
-    portrait: '/images/team/mitchell-tijerina.webp',
-    role: 'Co-Director and Producer',
-    bio: 'Mitchell conceived La Gente while studying at the Pontificia Universidad Católica del Perú (PUCP) in Lima. He works in mapping and data science for the civil engineering firm B&N. He holds an MS in Geography from Ohio University and a BA in Geosciences from Denison University. As a Fulbright Scholar in Popayán, Colombia, he continued filming and working toward ecological and cultural conservation. He has also worked with Loose Films in Columbus, Ohio, and on other local film projects.',
-  },
-  {
-    name: 'Benjamin Keller',
-    portrait: '/images/team/benjamin-keller.webp',
-    role: 'Co-Director and Cinematographer',
-    bio: 'Ben has created documentaries for more than a decade. His work includes films about a mentorship program for left-behind children in China, a humanitarian refugee organization in Costa Rica, and water resources in Nepal. He works for UNDP as a Programme and Data Analyst at the Sustainable Energy Hub. He holds master’s degrees in Technology Innovation from the University of Washington and Data Science from Tsinghua University, and a BS in Physics with minors in Mathematics, Music, and Geoscience from Denison University.',
-  },
-  {
-    name: 'Katie Sung Lee',
-    portrait: '/images/team/katie-sung-lee.webp',
-    role: 'Animator',
-    bio: 'Katie Sung Lee creates animated sequences for the chapters of La Gente de La Tierra. She is an art director, designer, and 2D animator based in Cincinnati, where she works at Epipheo as an Art Director. Her past work includes directing and creating short films and an award-winning music video, interning with DreamWorksTV, and animating for independent filmmakers. She graduated from CalArts’ Character Animation program and studied for a semester at Gobelins in Paris.',
-  },
-  {
-    name: 'Mason Stilwell',
-    portrait: '/images/team/mason-stilwell.webp',
-    role: 'Photographer and Secondary Videographer',
-    bio: 'Mason was the secondary videographer for La Gente de La Tierra. His travel photography has received awards in three competitions for images from Morocco. He began exploring filmmaking in 2017, and La Gente was his first feature-length project. He graduated from St. Olaf College with a BA in Biology and Computer Science and a concentration in Mathematical Biology.',
-  },
-];
+import {cms, imageUrl, rich} from '../data/cms.mjs';
+const team = cms.people.map(member => ({...member, portrait: imageUrl(member.portrait, 900)}));
 ---
 <BaseLayout title="About — La Gente de La Tierra" description="Learn about the documentary series, its mission, and the filmmaking team.">
   <header class="page-hero page-shell"><p class="eyebrow">La Gente de La Tierra</p><h1>Stories rooted<br />in the Earth.</h1><p class="lead">La Gente de La Tierra is a documentary series of vignettes from six communities across Peru, offering intimate accounts of their connection with the Earth and the effects of climate change in remote communities.</p></header>
@@ -34,14 +10,8 @@ const team = [
   <section class="page-shell narrow-grid content-section"><div><p class="eyebrow">The documentary</p><h2>A journey through<br />the microcosm of Peru.</h2></div><div><p>Compiled from more than 30 interviews in four languages, the series follows six communities and invites viewers to reconsider their own connection with Mother Nature.</p><p>Each chapter presents an intimate window into a community’s world: how lives have been shaped by the environment and how people are experiencing global climate change.</p></div></section>
   <section class="page-shell narrow-grid content-section"><div><p class="eyebrow">Mission</p><h2>Ecological and cultural conservation.</h2></div><div><p class="lead">To promote global ecological and cultural conservation by presenting a window into the lives of individuals and communities who have a profound connection with the natural world.</p></div></section>
   <section class="page-shell narrow-grid content-section"><div><p class="eyebrow">About the team</p><h2>A collaborative production.</h2></div><div><p>La Gente de La Tierra was filmed and directed by Mitchell Tijerina and Ben Keller through Aesthetic Voyager Films. Primary contributors include Mason Stilwell as assistant cameraman, Digital Creative Visionaries for additional footage and interviews, Loose Films for production assistance, and Katie Sung Lee for animation.</p><p>Principal photography was funded through a 2017 Kickstarter campaign. Post-production is funded by a private grant from Don and Teckie Shackelford through the American Home Foundation.</p></div></section>
-  <section class="page-shell team-section" id="team"><p class="eyebrow">The filmmakers</p><h2>Meet the team.</h2><div class="team-grid">{team.map((member) => <article><PlaceholderImage src={member.portrait} label={`${member.name} portrait`} ratio="portrait" /><h3>{member.name}</h3><p class="team-role">{member.role}</p><p>{member.bio}</p></article>)}</div></section>
+  <section class="page-shell team-section" id="team"><p class="eyebrow">The filmmakers</p><h2>Meet the team.</h2><div class="team-grid">{team.map((member) => <article><PlaceholderImage src={member.portrait} label={`${member.name} portrait`} ratio="portrait" /><h3>{member.name}</h3><p class="team-role">{member.role}</p><div set:html={rich(member.bio)} /></article>)}</div></section>
   <section class="page-shell faq-section"><p class="eyebrow">FAQs</p><h2>Questions about the series.</h2>
-    <details open><summary>Where did the idea for the series come from?</summary><p>The idea began during a conversation with a Peruvian woman about paintings of the Earth at her restaurant in the Cusco region. She explained: “We are the people of the Earth. We are not simply on the Earth; we come from the land itself.” As the filmmakers spent more time in the Andes and Amazon, they encountered this understanding of the Earth as a living being and mother responsible for creation and sustenance. The series shares that worldview in the hope that viewers reflect on their own relationship with the Earth.</p></details>
-    <details><summary>When will La Gente be released, and how can I watch?</summary><p>The six-part series is coming in October 2026. Watch the trailer on this website and request release updates to receive viewing information. For festival, community, or educational screenings, email <a href="mailto:aestheticvoyagerfilms@gmail.com">aestheticvoyagerfilms@gmail.com</a>.</p></details>
-    <details><summary>How did you connect with these communities?</summary><p>Connections developed through nonprofit and Indigenous organizations, as well as Mitchell’s relationships with professors and students at the Pontificia Universidad Católica del Perú in Lima. These introductions helped the team begin conversations with communities and people whose stories became part of the series.</p></details>
-    <details><summary>How did you film and edit interviews in Indigenous languages?</summary><p>During interviews, local guides and speakers helped interpret between Spanish and the languages being used. In post-production, the team continued working with community members and other speakers to check translation context and the timing of interview passages.</p></details>
-    <details><summary>What equipment did you use to film the series?</summary><p>The principal camera was a Blackmagic Pocket Cinema Camera paired with a Lumix 12–35 mm lens. Additional cameras and footage from collaborators helped document the different locations, including aerial footage.</p></details>
-    <details><summary>How can I use content from La Gente in my classroom or educational program?</summary><p>Email <a href="mailto:aestheticvoyagerfilms@gmail.com">aestheticvoyagerfilms@gmail.com</a> with your institution, intended audience, and the chapter or topic you would like to share. The filmmakers can discuss viewing copies and permission for your educational setting.</p></details>
-    <details><summary>How can I get involved beyond watching?</summary><p>Explore the community organizations on the Get Involved page, share the trailer, or contact the filmmakers about screenings and creative collaboration. The series invites a continuing conversation about ecological and cultural conservation.</p></details>
+    {cms.faqs.map((faq, index) => <details open={index === 0}><summary>{faq.question}</summary><div set:html={rich(faq.answer)} /></details>)}
   </section>
 </BaseLayout>

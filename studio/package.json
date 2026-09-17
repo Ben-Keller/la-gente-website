@@ -1,0 +1,53 @@
+{
+  "name": "la-gente-de-la-tierra",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "main": "package.json",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "deploy-graphql": "sanity graphql deploy",
+    "dev": "sanity dev",
+    "start": "sanity dev",
+    "check": "tsc --noEmit",
+    "typegen": "sanity schemas extract --force && sanity typegen generate",
+    "migration:prepare": "tsx scripts/prepare-import.ts",
+    "migration:dry-run": "node scripts/import-content.mjs",
+    "migration:import": "sanity exec scripts/import-content.mjs --with-user-token -- --execute",
+    "migration:verify": "sanity exec scripts/validate-import.mjs --with-user-token"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@sanity/client": "8.6.2",
+    "@sanity/icons": "5.2.2",
+    "@sanity/image-url": "2.1.1",
+    "@sanity/orderable-document-list": "2.0.24",
+    "@sanity/vision": "^6.14.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sanity": "^6.14.1",
+    "styled-components": "^6.1.18"
+  },
+  "devDependencies": {
+    "@sanity/eslint-config-studio": "^7",
+    "@types/node": "22.20.3",
+    "@types/react": "^19.2.14",
+    "cheerio": "1.2.0",
+    "eslint": "^10.8.1",
+    "lexorank": "1.0.5",
+    "prettier": "^3.5",
+    "sharp": "0.35.4",
+    "tsx": "4.23.13",
+    "typescript": "^5.8"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true
+  }
+}

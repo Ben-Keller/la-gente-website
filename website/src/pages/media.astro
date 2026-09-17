@@ -2,21 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderImage from '../components/PlaceholderImage.astro';
 import { withBase } from '../utils/paths';
-import sharp from 'sharp';
-import path from 'node:path';
-import { galleryIds, galleryCaptions } from '../data/gallery';
-
-const galleryImages = await Promise.all(galleryIds.map(async (id, index) => {
-  const src = `/images/gallery/${id}.webp`;
-  const metadata = await sharp(path.join(process.cwd(), 'public', src)).metadata();
-
-  return {
-    src,
-    width: metadata.width ?? 1600,
-    height: metadata.height ?? 1200,
-    caption: galleryCaptions[id] ?? '',
-    alt: galleryCaptions[id] ?? `Photograph ${index + 1} from filming La Gente de La Tierra in Peru`,
-  };
+import {cms, imageUrl} from '../data/cms.mjs';
+const galleryImages = cms.photographs.map((photo, index) => ({
+  src: imageUrl(photo, 1800),
+  width: Math.round(photo.image.dimensions.width * (1 - (photo.image.crop?.left || 0) - (photo.image.crop?.right || 0))),
+  height: Math.round(photo.image.dimensions.height * (1 - (photo.image.crop?.top || 0) - (photo.image.crop?.bottom || 0))),
+  caption: [photo.caption, photo.credit].filter(Boolean).join(' — '),
+  alt: photo.alt || photo.caption || `Photograph ${index + 1} from filming La Gente de La Tierra in Peru`,
 }));
 ---
 <BaseLayout title="Media — La Gente de La Tierra" description="Press, trailers, stills, and updates from La Gente de La Tierra.">

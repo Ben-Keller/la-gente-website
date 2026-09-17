@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { withBase } from '../utils/paths';
 import { galleryCaptions } from '../data/gallery';
+import {cms, rich} from '../data/cms.mjs';
 ---
 <BaseLayout title="Press Kit — La Gente de La Tierra" description="Synopsis, filmmaker biographies, production credits, and approved media for La Gente de La Tierra.">
   <header class="page-hero page-shell"><p class="eyebrow">Press kit</p><h1>Materials for<br />press and partners.</h1><p class="lead">Background on the series, filmmaker biographies, and production credits. Contact the filmmakers for press images, interviews, and screening materials.</p></header>
@@ -9,7 +10,7 @@ import { galleryCaptions } from '../data/gallery';
   <section class="press-section page-shell narrow-grid"><h2>Long synopsis</h2><p>La Gente de La Tierra is a documentary series of six intimate community portraits from across Peru. Compiled from more than thirty interviews in four languages, the series follows how relationships with land, water, plants, minerals, and the ocean shape culture—and how global climate change is being experienced in remote communities.</p></section>
   <section class="press-section page-shell">
     <p class="eyebrow">Filmmakers</p>
-    <div class="press-columns"><article><h2>Mitchell Tijerina</h2><p>Co-director and producer. Mitchell conceived the series while studying at the Pontificia Universidad Católica del Perú in Lima and has continued work connecting geography, storytelling, and ecological conservation.</p></article><article><h2>Benjamin Keller</h2><p>Co-director and cinematographer. Ben has created documentary work across Asia, Central America, and Nepal and works at the intersection of sustainable development, data, and technology.</p></article></div>
+    <div class="press-columns">{cms.people.filter(person => person.shortBio?.length).map(person => <article><h2>{person.name}</h2><div set:html={rich(person.shortBio)} /></article>)}</div>
   </section>
   <section class="press-section page-shell narrow-grid"><h2>Production credits</h2><div><p>Directed and filmed by Mitchell Tijerina and Benjamin Keller through Aesthetic Voyager Films.</p><p>Additional cinematography: Mason Stilwell. Animation: Katie Sung Lee. Additional footage and interviews: Digital Creative Visionaries. Production assistance: Loose Films.</p><p>Principal photography was supported by a 2017 Kickstarter campaign. Post-production support was provided through a private grant from Don and Teckie Shackelford through the American Home Foundation.</p></div></section>
   <section class="press-section page-shell"><p class="eyebrow">Selected stills</p><div class="press-stills">{['media5','media23','media35','media44'].map((name) => <img src={withBase(`/images/gallery/${name}.webp`)} alt={galleryCaptions[name] ?? (name === 'media35' ? 'A fisherman beside a reed craft on the beach at Huanchaco' : 'Participants gather on a mountain slope during the Andean New Year celebration')} loading="lazy" />)}</div><p>To request high-resolution stills, usage permission, and approved credits for coverage of the series, contact the filmmakers.</p></section>
