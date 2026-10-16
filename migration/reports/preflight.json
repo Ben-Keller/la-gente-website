@@ -1,0 +1,216 @@
+{
+  "preparedAt": "2026-09-17T09:09:20.198Z",
+  "projectId": "80rpogyy",
+  "dataset": "production",
+  "remoteWrites": false,
+  "counts": {
+    "photograph": 60,
+    "organization": 10,
+    "chapter": 6,
+    "person": 4,
+    "faq": 7,
+    "homePage": 1,
+    "aboutPage": 1,
+    "chaptersPage": 1,
+    "involvementPage": 1,
+    "mediaPage": 1,
+    "contactPage": 1,
+    "pressPage": 1,
+    "privacyPage": 1,
+    "notFoundPage": 1,
+    "siteSettings": 1,
+    "video": 3
+  },
+  "documents": 100,
+  "sourceImageFiles": 75,
+  "selectedImageAssets": 60,
+  "selectedBytes": 8307382,
+  "galleryPhotographs": 48,
+  "issues": [
+    {
+      "severity": "editorial",
+      "source": "media1",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media10",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media11",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media13",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media16",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media2",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media23",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media28",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media3",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media30",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media31",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media32",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media33",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media35",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media36",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media37",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media4",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media40",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media42",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media43",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media52",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media8",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "media9",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "hero-poster",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "About-Mission",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "GI-Main",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "Saltmines2-1-scaled",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "about-main",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "contact-team",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "main1",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "main5",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "benjamin-keller",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "katie-sung-lee",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "mason-stilwell",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "editorial",
+      "source": "mitchell-tijerina",
+      "message": "No verified caption/alternative text; review visually. No credit was invented."
+    },
+    {
+      "severity": "integration",
+      "source": "forms",
+      "message": "Contact/newsletter labels and client-side status strings remain in source; require dedicated form settings and frontend wiring before cutover."
+    },
+    {
+      "severity": "integration",
+      "source": "pages",
+      "message": "Extracted page sections need frontend field mapping and visual parity review. Do not switch production builds to these documents yet."
+    }
+  ]
+}
